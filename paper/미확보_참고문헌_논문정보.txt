@@ -11,12 +11,16 @@ PDF를 내려받지 못했습니다. 각 항목에 브라우저에서 직접 열
 
 ※ 이미 PDF로 확보된 문헌 (별도 파일):
   - BlandAltman_2007, Talukdar_2022, Jeanfavre_2026, Li_J_2022(Thorax),
-    Yau_2024(PLOS One), Haag_2025(arXiv) — 참고문헌 폴더
+    Yau_2024(PLOS One), Haag_2025(arXiv), Molinaro_2022(Sensors),
+    Kim_2024(Life) — 참고문헌 폴더
   - Shnitzer_2025, KumarPichai_2026, Kempton_2025, MuellerGraff_2026 — 참고논문 폴더
 
 ================================================================================
 [A] 오픈액세스이나 출판사가 봇 차단 중 → 브라우저에서 클릭해 다운로드
 ================================================================================
+※ 2026-10-07 추가: Europe PMC(fullTextPDF) 경유로 #15(Molinaro_2022)와
+  #20(Kim_2024) PDF를 확보했습니다. 아래 목록에서 이 두 항목은 이미 받았으므로
+  참고문헌 폴더의 PDF를 사용하면 됩니다.
 
 1. Cox NS, Dal Corso S, Hansen H, McDonald CF, Hill CJ, Zanaboni P, Alison JA,
    O'Halloran P, Macdonald H, Holland AE. Telerehabilitation for chronic
