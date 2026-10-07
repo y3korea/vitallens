@@ -1,0 +1,4 @@
+# Python packages used only by the statistics cross-check in `npm test` (validation/crosscheck_stats.py)
+numpy
+pandas
+statsmodels

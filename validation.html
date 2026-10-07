@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
+<title>검증 — VitalLens</title>
+<meta name="description" content="VitalLens 심박 추정 알고리즘의 시뮬레이션 교차검증 결과와, 맥박산소측정기·심전도 심박계 대비 실측 검증 도구.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22><rect width=%2232%22 height=%2232%22 rx=%228%22 fill=%22%23e34948%22/><path d=%22M6 17h4l2-6 4 12 3-9 2 3h5%22 stroke=%22white%22 stroke-width=%222.4%22 fill=%22none%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22/></svg>">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="VitalLens">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:title" content="검증 — VitalLens">
+<meta property="og:description" content="VitalLens 심박 추정 알고리즘의 시뮬레이션 교차검증 결과와, 맥박산소측정기·심전도 심박계 대비 실측 검증 도구.">
+<meta property="og:url" content="https://y3korea.github.io/vitallens/validation.html">
+<link rel="canonical" href="https://y3korea.github.io/vitallens/validation.html">
+<link rel="stylesheet" href="css/style.css">
+<script src="js/theme-init.js"></script>
+</head>
+<body>
+
+<a class="skip-link" href="#main">본문으로 건너뛰기</a>
+<nav class="site-nav" aria-label="주 메뉴">
+  <div class="wrap">
+    <a class="brand" href="index.html">
+      <svg class="mark" viewBox="0 0 32 32" fill="none" aria-hidden="true"><rect width="32" height="32" rx="9" fill="var(--cardiac)"/><path d="M6 17h4l2-6 4 12 3-9 2 3h5" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      VitalLens
+    </a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="index.html">홈</a></li>
+      <li><a href="evidence.html">근거</a></li>
+      <li><a href="technology.html">기술</a></li>
+      <li><a href="validation.html">검증</a></li>
+      <li><a href="agent.html">AI 코치</a></li>
+      <li><a href="demo.html">라이브 데모</a></li>
+      <li><a href="about.html">소개</a></li>
+    </ul>
+    <div style="display:flex; align-items:center;">
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="밝은/어두운 테마 전환">🌙</button>
+      <button class="nav-toggle-btn" type="button" data-nav-toggle aria-label="메뉴 열기" aria-expanded="false" aria-controls="nav-links">☰</button>
+    </div>
+  </div>
+</nav>
+
+<main id="main">
+<header class="hero" style="padding:56px 0 20px;">
+  <div class="wrap">
+    <span class="hero-badge">검증</span>
+    <h1 style="font-size:clamp(28px,4vw,42px);">숫자를 내기 전에, 숫자를 검증합니다</h1>
+    <p class="lead">검증은 두 단계입니다. <strong>① 알고리즘 검증</strong>은 정답을 아는 합성 신호로 코드 자체의 오차를 잽니다(아래 결과는 실제로 실행한 값). <strong>② 실측 검증</strong>은 사람을 대상으로 기준기기와 비교해야 하며, 이 페이지의 도구로 직접 수행합니다. ①은 ②를 대신할 수 없습니다.</p>
+  </div>
+</header>
+
+<section class="tight" id="sim-report">
+  <div class="wrap">
+    <p class="section-eyebrow">① 알고리즘 검증 · 시뮬레이션 교차검증</p>
+    <h2 class="section-title">초기 데모의 결함을 찾아 고친 기록</h2>
+    <p class="section-lead">처음 만든 v1(피크 계수)은 신호가 나빠도 항상 숫자를 냈고, 이 맥파 모델(이완기 봉우리가 수축기의 45%)에서는 안정시 심박 50–60 bpm에서 이완기 봉우리를 박동으로 한 번 더 세는 결함이 드러났습니다. 베타차단제 복용자가 많은 심박대라 치명적입니다. 이를 스펙트럼 추정 + 품질 기준(v1.6)으로 바꾸고, 기준값은 교차검증으로 정했습니다. 줄어든 오답의 상당 부분은 <strong>숫자를 내지 않고 보류</strong>해서 얻은 것이며, 그 대가를 아래에 함께 공개합니다.</p>
+    <div id="sim-headline"></div>
+
+    <div class="callout callout-warn" style="margin:20px 0;">
+      <span class="ic" aria-hidden="true">⚠️</span>
+      <div><strong>해결하지 못한 문제 — 운동 중 주기적 움직임.</strong> 자전거 페달·제자리걸음처럼 심박 대역 안에 드는 움직임이 있으면 녹색·POS 모두 움직임 리듬을 심박으로 착각합니다. 맥파와 같은 세기의 약한 움직임에서도 오답 출력이 녹색 약 12–14%, POS 약 10–29%(잡음 모델에 따라)였고, 실제 운동 움직임은 보통 더 큽니다. 그래서 VitalLens는 운동 중 연속 측정을 주장하지 않고, <strong>운동 구간 사이에 12초 멈춰 재는 "정지 체크인"</strong>과 자각인지도로 강도를 관리합니다.</div>
+    </div>
+
+    <div class="grid grid-2" style="align-items:start;">
+      <div class="card">
+        <h3>품질 기준은 데이터가 아니라 비용 선택입니다</h3>
+        <p class="small" style="margin-bottom:8px;">기준을 엄격하게 할수록 오답이 줄지만 정답도 함께 줄어듭니다. 채택한 2 dB는 "정답 − 3 × 오답"을 최대화하는 설계 가중치(오답 1건의 손해 = 보류 4건)에서 나온 값입니다.</p>
+        <div id="sim-riskcov"></div>
+      </div>
+      <div class="card">
+        <h3>가중치를 바꾸면</h3>
+        <div id="sim-penalty"></div>
+      </div>
+    </div>
+
+    <details class="card" style="padding:18px 22px; margin-top:20px;">
+      <summary class="kicker" style="cursor:pointer;">조건별 상세 결과, 심박별 측정 가능성, 재현, 민감도, 회복기 편향 펼치기</summary>
+      <div style="margin-top:16px;">
+        <p class="small">각 칸은 조건마다 심박 11단계 × 40회 = 440개 신호의 결과입니다. 행의 <strong>입력 SNR</strong>은 녹색 채널 맥파의 RMS 대 표본당 센서 잡음(20 Hz)의 비로, 품질 기준에 쓰는 <strong>스펙트럼 SNR</strong>과 다른 양입니다. 오답 출력이 5%를 넘는 칸은 강조 표시했습니다.</p>
+        <div class="grid grid-3" id="sim-scenarios" style="align-items:start;"></div>
+        <div id="sim-hr" style="margin-top:16px;"></div>
+        <div id="sim-replication" style="margin-top:16px;"></div>
+        <p class="small" id="sim-sensitivity" style="margin-top:12px;"></p>
+        <div id="sim-recovery" style="margin-top:16px;"></div>
+        <p class="small">정지 체크인 심박은 운동을 멈춘 직후 회복기 12초의 평균이라 멈춘 순간보다 2–9 bpm 낮게 나옵니다(위 표). 커널은 이 값을 운동 목표와 비교하므로 과강도를 덜 잡아내는 쪽으로 치우칩니다. 그래서 운동부하검사가 없으면 자각인지도가 1차 기준이고, 심박이 1차 기준이어도 자각인지도가 목표를 넘으면 강도를 낮춥니다.</p>
+      </div>
+    </details>
+
+    <div class="grid grid-2" style="margin-top:20px;">
+      <div class="card">
+        <h3>시뮬레이션 신호 모델</h3>
+        <p>피부 ROI의 RGB(평균 144/106/86)에 혈액량 색 서명(0.33 : 0.77 : 0.53)을 따르는 두 봉우리 맥파(이완기 봉우리 = 수축기의 45%, 0.3·박동간격 뒤), 심박변이(3%)와 호흡성 부정맥, 호흡에 의한 기저선 흔들림, 조명 무작위 드리프트, 채널별 백색 센서 잡음, 브라우저 타이머 지터를 넣었습니다. 움직임은 심박 대역 안(0.8–2.5 Hz)의 주기 신호로 녹색 채널에서 맥파와 같은 세기, 밝기 변화는 맥파의 5배(밝기의 약 2.5%)입니다 — 둘 다 실제보다 약한 조건입니다. 브라우저와 같은 12초 시간 창을 씁니다.</p>
+      </div>
+      <div class="card">
+        <h3>재현 방법</h3>
+        <p><a href="https://github.com/y3korea/vitallens">소스 저장소</a>를 받아 <span class="code-note">npm run verify</span>(약 80초, Node만 필요)를 실행하면 위 표가 그대로 다시 계산됩니다. 난수 시드가 고정되어 있어 누구나 같은 숫자를 얻습니다. <span class="code-note">npm test</span>는 필터 응답, 50 bpm 이중 계수 회귀, 표시 주기와 무관한 12초 창, 잡음 보류, 통계식(Shrout &amp; Fleiss 1979 예제, 독립 Python 구현·statsmodels 혼합모형과 대조)을 확인합니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="background:var(--surface-1); border-top:1px solid var(--border); border-bottom:1px solid var(--border);">
+  <div class="wrap">
+    <p class="section-eyebrow">② 실측 검증 · 프로토콜</p>
+    <h2 class="section-title">기준기기와 나란히 재기</h2>
+    <div class="steps">
+      <div class="step"><div class="n">1</div><div><h3>기준기기</h3><p>가능하면 흉부 스트랩형 심전도 심박계, 없으면 인증받은 손가락 맥박산소측정기를 씁니다. 기준기기는 한 연구에서 하나로 통일하고, 섞였다면 기준기기별로 나눠 보고합니다. 브라우저 rPPG의 공개 검증 연구도 심전도를 기준으로 삼았습니다(Finotti et al., 2026, ICC 0.96).</p></div></div>
+      <div class="step"><div class="n">2</div><div><h3>측정 조건과 짝짓기</h3><p>앉은 안정 시, 30초 앉았다일어서기 직후 회복기를 각각 자연광·실내등에서 잽니다. 기준기기 값을 <strong>읽는 순간</strong> ‘스냅샷’을 누르면 직전 12초 창의 추정치가 고정되고, 창의 시작·끝 시각이 함께 저장됩니다. 회복기는 심박이 빠르게 변하므로 시각이 기록되는 심전도 스트랩을 권장합니다.</p></div></div>
+      <div class="step"><div class="n">3</div><div><h3>표본 수</h3><p>참여자마다 여러 번 재므로 일치한계는 Bland &amp; Altman(2007) 반복측정 방법으로 구하고, 신뢰구간은 참여자 단위 부트스트랩으로 구합니다. 일치한계의 정밀도는 측정 건수보다 <strong>참여자 수</strong>에 좌우됩니다. t 분포를 쓴 Bland–Altman 근사식으로 95% 신뢰구간 반폭은 20명이면 차이 표준편차의 약 ±0.81배이고, ±0.5배로 좁히려면 약 48명이 필요합니다(참여자당 1회 측정 기준 근사). 도구는 참여자 10명 미만이면 신뢰구간을 내지 않습니다.</p></div></div>
+      <div class="step"><div class="n">4</div><div><h3>형평성</h3><p>rPPG 성능은 피부톤에 따라 달라질 수 있다고 보고됩니다(Pirzada et al., 2024). 참여자 자기보고 Fitzpatrick 유형을 함께 기록해 유형별 오차를 따로 보고합니다.</p></div></div>
+    </div>
+    <div class="callout callout-critical" style="margin-top:18px;">
+      <span class="ic" aria-hidden="true">🧾</span>
+      <div><strong>연구윤리.</strong> 다른 사람을 참여자로 모집해 측정하는 것은 사람 대상 연구로, 소속 기관 생명윤리위원회(IRB) 심의 대상일 수 있습니다. 실험 전에 지도교수·IRB와 확인하세요. 기록에는 이름 대신 P01 같은 가명 ID만 쓰세요.</div>
+    </div>
+  </div>
+</section>
+
+<section class="tight">
+  <div class="wrap">
+    <p class="section-eyebrow">② 실측 검증 · 측정 도구</p>
+    <h2 class="section-title">같은 영상에서 두 방식을 동시에</h2>
+    <p class="section-lead">카메라를 켜면 같은 얼굴 영상으로 <strong>녹색(v1.6)</strong>과 <strong>POS</strong> 추정치를 동시에 계산합니다. 12초 창이 다 찬 뒤에만 숫자를 냅니다. 품질 기준에 걸려 보류된 값도 원래 추정치를 함께 남겨, 실제 데이터에서 품질 기준이 제 역할을 했는지 검증할 수 있게 했습니다.</p>
+
+    <div class="demo-shell">
+      <div class="demo-body">
+        <div>
+          <div class="video-frame">
+            <video id="v-video" muted playsinline aria-label="카메라 미리보기"></video>
+            <canvas id="v-canvas" style="display:none;"></canvas>
+            <div class="roi-oval" aria-hidden="true"></div>
+            <div class="video-overlay-msg" id="v-overlay">카메라를 켜고 얼굴을 타원 안에 맞춘 뒤<br>12초 이상 가만히 있어 주세요.</div>
+          </div>
+          <div style="display:flex; gap:10px; margin-top:14px; flex-wrap:wrap;">
+            <button class="btn btn-cardiac btn-sm" id="v-start" type="button">카메라 켜기</button>
+            <button class="btn btn-outline btn-sm" id="v-stop" type="button" disabled>끄기</button>
+          </div>
+          <p class="small" id="v-status" role="status" aria-live="polite" style="margin-top:10px;">대기 중</p>
+        </div>
+        <div class="side-panel">
+          <div class="grid grid-2" style="gap:10px;">
+            <div class="mini-card center"><span class="label-sm">녹색 v1.6</span><div class="bpm-sm" id="v-green">--</div><div class="small" id="v-green-snr"></div></div>
+            <div class="mini-card center"><span class="label-sm">POS</span><div class="bpm-sm" id="v-pos">--</div><div class="small" id="v-pos-snr"></div></div>
+          </div>
+          <div class="mini-card form-grid">
+            <label for="v-pid">참여자 ID (가명)</label><input id="v-pid" type="text" value="P01" maxlength="12" autocomplete="off" pattern="[A-Za-z0-9_\-]{1,12}">
+            <label for="v-cond">조건</label>
+            <select id="v-cond"><option>앉은 안정</option><option>STS 직후 회복</option><option>기타</option></select>
+            <label for="v-light">조명</label>
+            <select id="v-light"><option>자연광</option><option>실내등</option><option>혼합</option></select>
+            <label for="v-skin">Fitzpatrick 유형</label>
+            <select id="v-skin"><option>I</option><option>II</option><option selected>III</option><option>IV</option><option>V</option><option>VI</option><option>미응답</option></select>
+            <label for="v-device">기준기기</label>
+            <select id="v-device"><option>ECG 흉부 스트랩</option><option selected>손가락 맥박산소측정기</option></select>
+          </div>
+          <button class="btn btn-outline btn-sm" id="v-snap" type="button" disabled>기준기기 값을 읽는 순간 — 스냅샷</button>
+          <p class="small" id="v-snapinfo" role="status" aria-live="polite"></p>
+          <div class="mini-card form-grid"><label for="v-ref">기준 심박수 (bpm)</label><input id="v-ref" type="number" inputmode="numeric" min="30" max="220" placeholder="예: 72"></div>
+          <button class="btn btn-primary btn-sm" id="v-record" type="button" disabled>스냅샷과 기준값을 한 쌍으로 기록</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:22px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+        <h3 style="margin:0;">기록 <span class="small">(<span id="rec-count">0</span>건)</span></h3>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <button class="btn btn-outline btn-sm" id="rec-export" type="button">CSV 내보내기</button>
+          <button class="btn btn-outline btn-sm" id="rec-import-btn" type="button">CSV 불러오기</button>
+          <input type="file" id="rec-import" accept=".csv,text/csv" class="sr-only" tabindex="-1" aria-hidden="true">
+          <button class="btn btn-outline btn-sm" id="rec-clear" type="button">모두 지우기</button>
+        </div>
+      </div>
+      <p class="small" style="margin:8px 0 0;">기록은 서버로 가지 않고 이 브라우저의 저장소에 ‘모두 지우기’ 전까지 남습니다. 공개 주소(y3korea.github.io)의 저장소는 같은 계정의 다른 GitHub Pages 사이트와 공유되므로, 공용 컴퓨터에서는 수집 뒤 CSV로 내보내고 바로 지우세요.</p>
+      <div class="table-scroll" style="margin-top:12px;">
+        <table class="data-table compact">
+          <caption class="sr-only">기록된 측정 쌍</caption>
+          <thead><tr><th scope="col">#</th><th scope="col">ID</th><th scope="col">조건</th><th scope="col">조명</th><th scope="col">피부</th><th scope="col">기준기기</th><th scope="col">기준</th><th scope="col">녹색</th><th scope="col">SNR (녹색)</th><th scope="col">POS</th><th scope="col">SNR (POS)</th><th scope="col"><span class="sr-only">삭제</span></th></tr></thead>
+          <tbody id="rec-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="background:var(--surface-1); border-top:1px solid var(--border);">
+  <div class="wrap">
+    <p class="section-eyebrow">② 실측 검증 · 자동 분석</p>
+    <h2 class="section-title">논문에 들어갈 숫자</h2>
+    <p class="section-lead">편향과 반복측정 95% 일치한계(Bland &amp; Altman 2007), MAE·RMSE·MAPE, Pearson r, Lin의 일치상관계수, ICC(2,1)를 계산하고, 참여자 단위 부트스트랩 신뢰구간을 붙입니다. 계산식은 단위 테스트로 검증되어 있습니다.</p>
+    <div class="form-grid" style="max-width:520px; margin-bottom:14px;">
+      <label for="an-device">기준기기</label>
+      <select id="an-device"><option value="all">전체</option><option>ECG 흉부 스트랩</option><option>손가락 맥박산소측정기</option></select>
+      <label for="an-cond">조건</label>
+      <select id="an-cond"><option value="all">전체</option><option>앉은 안정</option><option>STS 직후 회복</option><option>기타</option></select>
+    </div>
+    <div id="analysis"></div>
+    <div class="card" style="margin-top:18px;">
+      <label for="paper-text" class="kicker">결과 문장 초안 (기록된 데이터로만 생성)</label>
+      <textarea id="paper-text" rows="6" readonly style="width:100%; margin-top:10px; font-family:var(--font); font-size:14px; padding:12px; border-radius:8px; border:1px solid var(--border); background:var(--surface-2); color:var(--text-primary);"></textarea>
+      <button class="btn btn-outline btn-sm" id="paper-copy" type="button" style="margin-top:10px;">복사</button>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div>© 2026 VitalLens Project · 경운대학교 재활치료전공 · 비상업 연구 프로토타입 · <strong>의료기기 아님</strong> (진단·치료 목적 사용 금지)</div>
+    <div><a href="evidence.html">근거</a> · <a href="technology.html">기술</a> · <a href="validation.html">검증</a> · <a href="about.html">소개·한계</a> · <a href="https://github.com/y3korea/vitallens">소스 코드</a></div>
+  </div>
+</footer>
+
+<script src="data/sim_results.js"></script>
+<script src="js/rppg-core.js"></script>
+<script src="js/stats.js"></script>
+<script src="js/main.js"></script>
+<script src="js/validation.js"></script>
+</body>
+</html>

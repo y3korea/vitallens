@@ -1,0 +1,215 @@
+{
+  "_meta": {
+    "io.github.y3korea/vitallens": {
+      "generatedFrom": "js/agent-core.js (validation/build_mcp_manifest.js)",
+      "server": "mcp/server.js — stdio MCP server exposing these tools over the same safety kernel with a simulated patient (it also adds a read-only export_session tool)"
+    }
+  },
+  "tools": [
+    {
+      "name": "get_patient_profile",
+      "title": "환자 프로필 조회",
+      "description": "Read the patient's clinician-entered risk level and exercise-relevant profile (age, resting HR, exercise-test HRmax if any, beta-blocker use, COPD/hypoxemia, supervision). Call this first.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "compute_target_zone",
+      "title": "목표 강도 구간 계산",
+      "description": "Compute the kernel-approved intensity band: heart-rate band from heart-rate reserve (Karvonen) plus Borg RPE band, whether RPE must be the primary criterion (no exercise-test HRmax, beta-blocker without an on-medication test, or COPD/hypoxemia), and the dyspnea target for COPD only. Returns the only band set_exercise_phase will accept.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "pre_session_safety_check",
+      "title": "세션 전 안전 확인",
+      "description": "Before any exercise, ask the patient today's readiness and emergency plan: new chest pain or unusual breathlessness today, feeling unwell, usual medication taken, phone within reach, a person who is present or reachable, clear space and a stable chair against a wall, knows to call 119, and resting SpO2 from their own oximeter (required for COPD). Any red flag means no session today. The kernel refuses every exercise phase until this passes.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "say_to_patient",
+      "title": "환자에게 말하기",
+      "description": "The only channel for coaching text. One or two short plain-Korean sentences. The kernel screens it (≤200 characters; no intensity escalation, no symptom minimisation, no medication or diagnosis advice) and blocks it after a safety stop, when a fixed stop script is shown instead. Plain text you write outside tools is never shown to the patient.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "maxLength": 200
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "set_exercise_phase",
+      "title": "운동 단계 지시",
+      "description": "Start an exercise phase and show the patient the instruction. Kernel rules: the first phase is warmup (once); a still_check_in is required after every phase before the next work phase; minutes per phase warmup/cooldown 3–10, work 1–10, recovery 1–5; total work ≤30 min; warm-up, recovery and cool-down stay at or below the zone's lower HR bound and RPE 11; nothing but check-ins and end_session after cooldown; targets must sit inside the approved (or reduced) band.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "phase": {
+            "type": "string",
+            "enum": [
+              "warmup",
+              "work",
+              "recovery",
+              "cooldown"
+            ]
+          },
+          "minutes": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 10
+          },
+          "target_hr_low": {
+            "type": "number",
+            "minimum": 30,
+            "maximum": 220
+          },
+          "target_hr_high": {
+            "type": "number",
+            "minimum": 30,
+            "maximum": 220
+          },
+          "target_rpe_low": {
+            "type": "number",
+            "minimum": 6,
+            "maximum": 20
+          },
+          "target_rpe_high": {
+            "type": "number",
+            "minimum": 6,
+            "maximum": 20
+          },
+          "instruction": {
+            "type": "string",
+            "maxLength": 200,
+            "description": "Short plain-Korean instruction shown to the patient; screened like say_to_patient."
+          }
+        },
+        "required": [
+          "phase",
+          "minutes",
+          "target_hr_low",
+          "target_hr_high",
+          "target_rpe_low",
+          "target_rpe_high",
+          "instruction"
+        ],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "still_check_in",
+      "title": "정지 체크인",
+      "description": "Pause the patient for a 12-second still heart-rate measurement (camera rPPG with quality gate, or a value the patient types from a device) and ask RPE (Borg 6–20), in-session dyspnea (modified Borg CR10, 0–10), SpO2 from their oximeter (required for COPD) and warning symptoms. The heart rate is an early-recovery value and reads lower than during exercise. The kernel evaluates the result: continue, reduce (returns the new caps), hold (recheck before more work) or stop.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string",
+            "maxLength": 80
+          }
+        },
+        "required": [
+          "reason"
+        ],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "run_sts_test",
+      "title": "30초 앉았다일어서기",
+      "description": "30-second chair stand; the patient enters the count (the camera counter on the demo page is a separate, unvalidated prototype and is not used here). Allowed once per session, right after the warm-up check-in (a standard condition for tracking change), before any work block, reduction or cool-down; a still_check_in must follow it.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "end_session",
+      "title": "세션 종료",
+      "description": "End the session with a short summary for the patient (screened like say_to_patient). Once exercise has started, the kernel requires a cool-down and a check-in after it, unless the session was stopped for safety.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "summary": {
+            "type": "string",
+            "maxLength": 200
+          }
+        },
+        "required": [
+          "summary"
+        ],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    }
+  ]
+}

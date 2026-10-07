@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
+<title>라이브 데모 — VitalLens</title>
+<meta name="description" content="카메라 기반 심박 추정(rPPG), 30초 앉았다일어서기 자동 카운터, 이중 채널 강도처방 계산기, 위험 층화 온보딩을 브라우저에서 직접 체험하세요.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22><rect width=%2232%22 height=%2232%22 rx=%228%22 fill=%22%23e34948%22/><path d=%22M6 17h4l2-6 4 12 3-9 2 3h5%22 stroke=%22white%22 stroke-width=%222.4%22 fill=%22none%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22/></svg>">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="VitalLens">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:title" content="라이브 데모 — VitalLens">
+<meta property="og:description" content="카메라 기반 심박 추정(rPPG), 30초 앉았다일어서기 자동 카운터, 이중 채널 강도처방 계산기, 위험 층화 온보딩을 브라우저에서 직접 체험하세요.">
+<meta property="og:url" content="https://y3korea.github.io/vitallens/demo.html">
+<link rel="canonical" href="https://y3korea.github.io/vitallens/demo.html">
+<link rel="stylesheet" href="css/style.css">
+<script src="js/theme-init.js"></script>
+</head>
+<body>
+
+<a class="skip-link" href="#main">본문으로 건너뛰기</a>
+<nav class="site-nav" aria-label="주 메뉴">
+  <div class="wrap">
+    <a class="brand" href="index.html">
+      <svg class="mark" viewBox="0 0 32 32" fill="none" aria-hidden="true"><rect width="32" height="32" rx="9" fill="var(--cardiac)"/><path d="M6 17h4l2-6 4 12 3-9 2 3h5" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      VitalLens
+    </a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="index.html">홈</a></li>
+      <li><a href="evidence.html">근거</a></li>
+      <li><a href="technology.html">기술</a></li>
+      <li><a href="validation.html">검증</a></li>
+      <li><a href="agent.html">AI 코치</a></li>
+      <li><a href="demo.html">라이브 데모</a></li>
+      <li><a href="about.html">소개</a></li>
+    </ul>
+    <div style="display:flex; align-items:center;">
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="밝은/어두운 테마 전환">🌙</button>
+      <button class="nav-toggle-btn" type="button" data-nav-toggle aria-label="메뉴 열기" aria-expanded="false" aria-controls="nav-links">☰</button>
+    </div>
+  </div>
+</nav>
+
+<main id="main">
+
+<header class="hero" style="padding:56px 0 12px;">
+  <div class="wrap">
+    <span class="hero-badge">라이브 데모</span>
+    <h1 style="font-size:clamp(28px,4vw,42px);">브라우저에서 바로 체험하기</h1>
+    <p class="lead">네 가지 모듈 모두 브라우저 안에서만 처리하며, 카메라 영상은 어디로도 전송되지 않습니다. 카메라를 쓸 수 없으면 이유를 알려 드리고, 합성 신호로 보는 시뮬레이션은 직접 고를 수 있습니다. 전체 세션 흐름은 <a href="agent.html">AI 코치</a>에서 볼 수 있습니다.</p>
+    <p class="small"><strong>의료기기가 아닙니다.</strong> 화면의 심박·횟수·판정은 연구용 참고값이며 진단·치료에 쓰면 안 됩니다.</p>
+    <div class="callout callout-warn" id="context-warning" style="display:none; margin-top:8px;">
+      <span class="ic" aria-hidden="true">⚠️</span>
+      <div>카메라 접근에는 보안 컨텍스트(HTTPS 또는 localhost)가 필요합니다. 현재 <span class="code-note" id="context-origin"></span> 에서 열려 있어 실시간 카메라 모드를 사용할 수 없습니다 — 모든 모듈이 시뮬레이션 모드로 동작합니다. 실제 카메라로 체험하려면 이 폴더에서 <span class="code-note">python3 -m http.server</span> 실행 후 <span class="code-note">http://localhost:8000</span> 으로 접속하세요.</div>
+    </div>
+  </div>
+</header>
+
+<section class="tight">
+  <div class="wrap">
+    <div class="demo-shell reveal">
+      <div class="demo-head">
+        <h2>① rPPG 심박 추정 (정지 상태)</h2>
+        <div class="mode-switch" data-widget="hr" role="group" aria-label="심박 측정 모드">
+          <button type="button" data-mode="camera" class="active" aria-pressed="true">🎥 실시간 카메라</button>
+          <button type="button" data-mode="sim" aria-pressed="false">▶ 시뮬레이션</button>
+        </div>
+      </div>
+      <div class="demo-body">
+        <div>
+          <div class="video-frame" id="hr-video-frame">
+            <video id="hr-video" muted playsinline aria-label="카메라 미리보기"></video>
+            <canvas id="hr-canvas" style="display:none;"></canvas>
+            <div class="roi-oval" id="hr-roi" aria-hidden="true"></div>
+            <div class="video-overlay-msg" id="hr-overlay">시작 버튼을 눌러 측정을 시작하세요.<br>얼굴을 타원 안에 맞추고 12초간 가만히 있어 주세요.<br>(12초 창이 찬 뒤 첫 추정이 나옵니다)</div>
+          </div>
+          <div style="display:flex; gap:10px; margin-top:14px;">
+            <button type="button" class="btn btn-cardiac btn-sm" id="hr-start">측정 시작</button>
+            <button type="button" class="btn btn-outline btn-sm" id="hr-stop" disabled>정지</button>
+          </div>
+          <p class="notice" id="hr-notice" role="status" hidden></p>
+        </div>
+        <div class="side-panel">
+          <div class="readout">
+            <div class="bpm"><span id="hr-bpm">--</span><span class="u"> bpm</span></div>
+            <div class="quality" id="hr-quality">대기 중</div>
+            <p class="sr-only" id="hr-sr" aria-live="polite"></p>
+            <canvas class="wave-canvas" id="hr-wave" aria-hidden="true"></canvas>
+          </div>
+          <div class="mini-card">
+            <span class="label-sm">측정 원리</span>
+            <p class="small" style="margin:6px 0 0;">화면 중앙 고정 영역(얼굴을 타원에 맞춤, 얼굴 검출 없음)의 녹색 채널 평균을 초당 20회 기록 → 최근 12초 창 → 균일 재표본화 → 0.67–3.0 Hz 대역통과 → 스펙트럼 최대 봉우리. 스펙트럼 SNR이 2 dB 미만이면 숫자 대신 "측정 보류". 운동 중이 아닌 정지 상태에서 재세요. <a href="technology.html">자세히</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="tight">
+  <div class="wrap">
+    <div class="demo-shell reveal">
+      <div class="demo-head">
+        <h2>② 30초 앉았다일어서기 카운터 <span class="small">(v1 시험 기능 · 미검증)</span></h2>
+        <div class="mode-switch" data-widget="sts" role="group" aria-label="앉았다일어서기 측정 모드">
+          <button type="button" data-mode="camera" class="active" aria-pressed="true">🎥 실시간 카메라</button>
+          <button type="button" data-mode="sim" aria-pressed="false">▶ 시뮬레이션</button>
+        </div>
+      </div>
+      <div class="demo-body">
+        <div>
+          <div class="video-frame" id="sts-video-frame">
+            <video id="sts-video" muted playsinline aria-label="카메라 미리보기"></video>
+            <canvas id="sts-canvas" style="display:none;"></canvas>
+            <div class="video-overlay-msg" id="sts-overlay">전신이 보이도록 카메라를 배치한 뒤 시작하세요.</div>
+          </div>
+          <div style="display:flex; gap:10px; margin-top:14px;">
+            <button type="button" class="btn btn-pulmonary btn-sm" id="sts-start">30초 검사 시작</button>
+            <button type="button" class="btn btn-outline btn-sm" id="sts-reset">리셋</button>
+          </div>
+          <p class="small" id="sts-status" role="status" aria-live="polite" style="margin-top:8px;"></p>
+          <p class="small">팔걸이 없는 의자를 벽에 붙여 고정하고, 흉통·어지러움·심한 숨참이 생기면 즉시 멈추세요. 일어서기와 앉기를 한 번으로 묶어 세지만, 직접 센 횟수와 비교한 검증은 아직 없습니다.</p>
+        </div>
+        <div class="side-panel">
+          <div class="mini-card">
+            <span class="label-sm" id="sts-timer-lbl">남은 시간</span>
+            <div class="big-timer" id="sts-timer" role="timer" aria-labelledby="sts-timer-lbl">0:30</div>
+          </div>
+          <div class="mini-card">
+            <span class="label-sm" id="sts-reps-lbl">반복 횟수</span>
+            <div class="rep-count" id="sts-reps" aria-labelledby="sts-reps-lbl">0</div>
+          </div>
+          <canvas class="wave-canvas" id="sts-wave" style="height:50px;" aria-hidden="true"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="tight">
+  <div class="wrap">
+    <div class="demo-shell reveal">
+      <div class="demo-head"><h2>③ 이중 채널 강도처방 계산기 (심박예비량 + 자각인지도)</h2></div>
+      <div class="demo-body two-col">
+        <div class="side-panel">
+          <div class="mini-card">
+            <label for="in-age">나이</label>
+            <div class="slider-row"><input type="range" id="in-age" min="18" max="95" value="62"><output class="slider-val" id="in-age-v" for="in-age">62</output></div>
+          </div>
+          <div class="mini-card">
+            <label for="in-rhr">안정시 심박수 (bpm)</label>
+            <div class="slider-row"><input type="range" id="in-rhr" min="40" max="110" value="70"><output class="slider-val" id="in-rhr-v" for="in-rhr">70</output></div>
+          </div>
+          <div class="mini-card">
+            <label for="in-hrmax">운동부하검사로 측정한 최대심박 (선택)</label>
+            <input type="number" id="in-hrmax" min="80" max="220" placeholder="없으면 비워두세요">
+            <label class="check" style="margin-top:8px;"><input type="checkbox" id="in-onmeds"> 검사를 현재 복용 약물 상태에서 시행</label>
+          </div>
+          <div class="mini-card">
+            <label for="in-intensity">목표 강도 (심박예비량 %)</label>
+            <div class="slider-row"><input type="range" id="in-intensity" min="30" max="80" value="45"><output class="slider-val" id="in-intensity-v" for="in-intensity">45%</output></div>
+            <p class="small" style="margin:6px 0 0;">시작 권장 구간 40–59% (EAPC 2020) · 심장질환 상한 80% (AHA 2013)</p>
+          </div>
+          <div class="mini-card">
+            <span class="form-label">임상 조건</span>
+            <label class="check" style="display:flex; margin-top:6px;"><input type="checkbox" id="in-beta"> 베타차단제 복용 중</label>
+            <label class="check" style="display:flex; margin-top:6px;"><input type="checkbox" id="in-copd"> COPD·저산소혈증 동반</label>
+          </div>
+        </div>
+        <div class="side-panel">
+          <div class="mini-card">
+            <span class="form-label">목표 심박수 (카보넨 공식)</span>
+            <div class="readout" style="padding:4px 0;">
+              <div class="bpm bpm-pulmonary"><span id="out-hr">--</span><span class="u"> bpm</span></div>
+              <div class="quality" id="out-hrmax"></div>
+            </div>
+          </div>
+          <div class="mini-card">
+            <label for="in-rpe">세션 중 자각인지도 (Borg RPE 6–20)</label>
+            <div class="slider-row"><input type="range" id="in-rpe" min="6" max="20" value="12"><output class="slider-val" id="in-rpe-v" for="in-rpe">12</output></div>
+            <p class="anchor-text" id="in-rpe-a" aria-hidden="true"></p>
+          </div>
+          <div class="mini-card">
+            <label for="in-dyspnea">세션 중 호흡곤란 (수정 Borg CR10, 0–10)</label>
+            <div class="slider-row"><input type="range" id="in-dyspnea" min="0" max="10" value="3"><output class="slider-val" id="in-dyspnea-v" for="in-dyspnea">3</output></div>
+            <p class="anchor-text" id="in-dyspnea-a" aria-hidden="true"></p>
+            <p class="small" style="margin:6px 0 0;">호흡재활(COPD) 목표 4–6 (ATS/ERS 2013) — 심장재활 환자의 목표가 아닙니다. mMRC는 일상의 만성 호흡곤란 등급이라 운동 중 척도로 쓰지 않습니다.</p>
+          </div>
+          <div class="callout callout-info" id="primary-guidance" style="padding:12px 14px; font-size:13px; display:block;"></div>
+          <p class="sr-only" id="guidance-sr" aria-live="polite"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="tight" style="padding-bottom:80px;">
+  <div class="wrap">
+    <div class="demo-shell reveal">
+      <div class="demo-head"><h2>④ 위험 선별 질문 (참고용)</h2></div>
+      <div class="demo-body one-col">
+        <div class="risk-flow" id="risk-flow"></div>
+        <div class="risk-result" id="risk-result" role="status" aria-live="polite" style="margin-top:6px;">질문에 답하면 위험군과 권고사항이 표시됩니다.</div>
+        <p class="small">질문은 교재 9.3절의 위험 층화 요소 — 좌심실 기능, 운동부하검사의 허혈·부정맥 소견, 최근 사건 이후 경과 기간, 동반질환과 인지·감각 기능, 가정 내 조력자 — 에 호흡재활 항목(안정 시 산소포화도·가정 산소, 최근 급성악화)을 더했습니다. 맨 위 ‘운동 금기’ 항목은 즉시 중단, ‘주요’ 표시 항목 하나 또는 나머지 항목 두 개는 고위험으로 보는 분류 규칙은 VitalLens의 설계 규칙이며 임상적으로 검증되지 않았습니다. 실제 위험 층화와 운동 허가는 의료진이 합니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div>© 2026 VitalLens Project · 경운대학교 재활치료전공 · 비상업 연구 프로토타입 · <strong>의료기기 아님</strong> (진단·치료 목적 사용 금지)</div>
+    <div><a href="evidence.html">근거</a> · <a href="technology.html">기술</a> · <a href="validation.html">검증</a> · <a href="about.html">소개·한계</a> · <a href="https://github.com/y3korea/vitallens">소스 코드</a></div>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+<script src="js/rppg-core.js"></script>
+<script src="js/rppg.js"></script>
+<script src="js/sts.js"></script>
+<script src="js/agent-core.js"></script>
+<script src="js/intensity.js"></script>
+</body>
+</html>

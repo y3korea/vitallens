@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
+<title>VitalLens — 카메라 심박과 안전 커널로 하는 심폐 원격재활</title>
+<meta name="description" content="심박 벨트 없이 카메라로 정지 시 심박을 재고, 근거 기반 안전 커널이 거부권을 가진 AI 코치가 가정 심장·호흡재활 세션을 이끄는 연구 프로토타입(의료기기 아님).">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22><rect width=%2232%22 height=%2232%22 rx=%228%22 fill=%22%23e34948%22/><path d=%22M6 17h4l2-6 4 12 3-9 2 3h5%22 stroke=%22white%22 stroke-width=%222.4%22 fill=%22none%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22/></svg>">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="VitalLens">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:title" content="VitalLens — 카메라 심박과 안전 커널로 하는 심폐 원격재활">
+<meta property="og:description" content="심박 벨트 없이 카메라로 정지 시 심박을 재고, 근거 기반 안전 커널이 거부권을 가진 AI 코치가 가정 심장·호흡재활 세션을 이끄는 연구 프로토타입(의료기기 아님).">
+<meta property="og:url" content="https://y3korea.github.io/vitallens/">
+<link rel="canonical" href="https://y3korea.github.io/vitallens/">
+<link rel="stylesheet" href="css/style.css">
+<script src="js/theme-init.js"></script>
+</head>
+<body>
+
+<a class="skip-link" href="#main">본문으로 건너뛰기</a>
+<nav class="site-nav" aria-label="주 메뉴">
+  <div class="wrap">
+    <a class="brand" href="index.html">
+      <svg class="mark" viewBox="0 0 32 32" fill="none" aria-hidden="true"><rect width="32" height="32" rx="9" fill="var(--cardiac)"/><path d="M6 17h4l2-6 4 12 3-9 2 3h5" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      VitalLens
+    </a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="index.html">홈</a></li>
+      <li><a href="evidence.html">근거</a></li>
+      <li><a href="technology.html">기술</a></li>
+      <li><a href="validation.html">검증</a></li>
+      <li><a href="agent.html">AI 코치</a></li>
+      <li><a href="demo.html">라이브 데모</a></li>
+      <li><a href="about.html">소개</a></li>
+    </ul>
+    <div style="display:flex; align-items:center;">
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="밝은/어두운 테마 전환">🌙</button>
+      <button class="nav-toggle-btn" type="button" data-nav-toggle aria-label="메뉴 열기" aria-expanded="false" aria-controls="nav-links">☰</button>
+    </div>
+  </div>
+</nav>
+
+<main id="main">
+
+<header class="hero">
+  <div class="wrap">
+    <span class="hero-badge">● 경운대학교 재활치료전공 · 원격재활과 디지털치료기기 공학 연구 프로토타입</span>
+    <h1>심박 벨트 없이,<br><span class="accent-cardiac">심장</span>·<span class="accent-pulmonary">호흡</span> 재활을<br>안전 규칙과 함께 집에서.</h1>
+    <p class="lead">VitalLens는 이미 가진 카메라로 멈춘 상태의 심박을 재고(rPPG), 신호가 나쁘면 숫자를 지어내지 않고 보류합니다. 세션을 이끄는 플래너(규칙 기반 또는 AI)는 도구로만 행동하고, 도구 호출과 <strong>환자에게 가는 모든 문장</strong>이 가이드라인 기반 안전 커널을 먼저 통과합니다. 산소포화도는 재지 못하므로 맥박산소측정기가 필요합니다(COPD는 필수, 심장재활도 권장).</p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="agent.html">AI 코치 세션 실행 →</a>
+      <a class="btn btn-outline" href="validation.html">검증 결과 보기</a>
+    </div>
+    <div class="tag-row">
+      <span class="tag">주요 임상 수치에 원출처 링크</span>
+      <span class="tag">영상은 브라우저 밖으로 나가지 않음</span>
+      <span class="tag">6,600개 신호 5겹 교차검증</span>
+      <span class="tag">안전·적대적 시나리오 자동 테스트</span>
+      <span class="tag">MCP 서버로 여는 안전 커널</span>
+    </div>
+  </div>
+</header>
+
+<section class="tight">
+  <div class="wrap">
+    <div class="grid grid-3">
+      <div class="stat-tile reveal">
+        <div class="num" style="color:var(--pulmonary-text)">93<small style="font-size:16px">%</small> <span class="small" style="font-weight:600">vs 70%</span></div>
+        <div class="label">원격 호흡재활 완료율 (센터 대비) — 1차 원격재활 vs 센터 비교 RCT 3편·516명, 만성 호흡기질환(대부분 COPD)</div>
+        <div class="src">Cox et al., Cochrane, 2021 · <a href="https://doi.org/10.1002/14651858.CD013040.pub2" target="_blank" rel="noopener">DOI</a></div>
+      </div>
+      <div class="stat-tile reveal">
+        <div class="num" style="color:var(--cardiac-text)">805<small style="font-size:16px">건</small></div>
+        <div class="label">등록 심장(386)·호흡(419)재활 임상시험 — 뇌졸중(926건)에 근접</div>
+        <div class="src">지식베이스 분석(ClinicalTrials.gov 등록 6,389건) · <a href="https://clinicaltrials.gov/" target="_blank" rel="noopener">원자료</a></div>
+      </div>
+      <div class="stat-tile reveal">
+        <div class="num" style="color:var(--combined-text)">14<small style="font-size:16px">/24편</small></div>
+        <div class="label">운동처방에 LLM을 쓴 연구 중 금기 운동 등 안전 결함을 보고한 비율(58%) — 안전 커널이 필요한 이유</div>
+        <div class="src">He et al., Biology of Sport, 2026 · <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC13343266/" target="_blank" rel="noopener">원문</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="section-eyebrow">문제</p>
+    <h2 class="section-title">근거는 탄탄한데, 왜 이용은 이렇게 낮을까</h2>
+    <p class="section-lead">심장재활과 호흡재활은 재활의학에서 가장 두꺼운 근거를 가진 프로그램군입니다. 그런데도 완료율은 낮습니다. 원인은 효과가 아니라 <strong>구조</strong>에 있습니다.</p>
+    <div class="grid grid-3">
+      <div class="card reveal">
+        <div class="icon icon-cardiac" aria-hidden="true">📉</div>
+        <h3>참여율이 무너지는 이동 장벽</h3>
+        <p>주 2~3회, 8~12주 센터 방문 설계는 원거리 거주·교통수단 부재·직업활동·호흡곤란으로 인한 이동 장벽에 동시에 취약합니다. 의뢰→등록→완료 단계마다 탈락이 누적됩니다.</p>
+      </div>
+      <div class="card reveal">
+        <div class="icon icon-pulmonary" aria-hidden="true">💸</div>
+        <h3>누가 비용을 내는가</h3>
+        <p>호주 경제성 분석에서 1인당 프로그램 비용은 원격 A$2,155, 센터 A$1,826이었고, 부담은 환자(센터 A$1,298 → 원격 A$554)에서 보건체계(A$529 → A$1,601)로 옮겨갔습니다. 원격이 지속되려면 제공자 쪽 비용을 줄여야 하고, 기기 구매를 환자에게 넘기면 원격의 이점이 사라집니다.</p>
+      </div>
+      <div class="card reveal">
+        <div class="icon icon-combined" aria-hidden="true">📏</div>
+        <h3>표준화되지 않은 원격 평가</h3>
+        <p>6분 보행검사는 코스 길이·회전 횟수·격려 표준화·감독자 부재로 결과가 흔들립니다. 그래서 절대값을 기관끼리 비교하기보다 같은 환자 안의 변화량을 추적하는 편이 안전합니다(교재 9.4).</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="background:var(--surface-1); border-top:1px solid var(--border); border-bottom:1px solid var(--border);">
+  <div class="wrap">
+    <p class="section-eyebrow">차별점</p>
+    <h2 class="section-title">VitalLens의 세 기둥</h2>
+    <p class="section-lead">근거 지도에서 심폐 원격재활 연구는 웨어러블·모바일앱·원격모니터링 축에 몰려 있습니다. VitalLens는 새 기술 축을 여는 대신 이 원격 모니터링 축 안에서 두 가지를 다르게 합니다: <strong>심박용 추가 기기 없는 측정</strong>과 <strong>검증할 수 있는 AI 안전 경계</strong>.</p>
+    <div class="grid grid-3">
+      <div class="card reveal">
+        <div class="icon icon-cardiac" aria-hidden="true">🎥</div>
+        <h3>1. 추가 기기 없는 심박 측정</h3>
+        <p>가슴 밴드·손목 웨어러블 없이 이미 가진 카메라로 멈춘 상태의 심박을 잽니다. 영상은 브라우저 안에서만 처리합니다. 산소포화도와 심전도(리듬)는 재지 못하므로 맥박산소측정기·심전도 패치를 대체하지 않습니다.</p>
+      </div>
+      <div class="card reveal">
+        <div class="icon icon-pulmonary" aria-hidden="true">📐</div>
+        <h3>2. 좁은 집에서도 되는 기능평가</h3>
+        <p>코스가 필요한 6분 보행검사 대신 공간 요구가 작은 30초 앉았다일어서기를 세션마다 준비운동 직후 같은 조건에서 합니다. 결과는 FHIR로 내보내 외부 기록 시스템에서 변화를 추적합니다. 카메라 자동 카운터는 검증 전 시험 기능입니다.</p>
+      </div>
+      <div class="card reveal">
+        <div class="icon icon-combined" aria-hidden="true">🛡️</div>
+        <h3>3. 안전 경계가 있는 에이전트</h3>
+        <p>플래너(규칙 기반·Claude·MCP 클라이언트)는 도구로만 행동하고, 환자에게 하는 말도 도구로만 보냅니다. 결정론적 커널이 형식·순서·강도·문장을 먼저 판정하고 거부하거나 세션을 멈출 수 있습니다. 같은 커널을 MCP 서버로 열어, 소스를 받은 사람이 자기 에이전트로 커널의 거부를 확인해 볼 수 있게 했습니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="section-eyebrow">작동 방식</p>
+    <h2 class="section-title">4단계 세션 흐름</h2>
+    <div class="steps">
+      <div class="step reveal">
+        <div class="n">1</div>
+        <div><h3>위험군과 오늘의 안전 확인</h3><p>의료진이 층화한 위험군을 입력받아 고위험군은 원격 세션을 열지 않고, 중위험군은 의료진 승인과 실시간 화상 감독이 있을 때만 엽니다. 매 세션 전 오늘의 증상과 휴대전화·안전한 공간·119 연락을 확인합니다.</p></div>
+      </div>
+      <div class="step reveal">
+        <div class="n">2</div>
+        <div><h3>커널이 승인한 목표 구간</h3><p>운동부하검사로 측정한 최대심박이 있으면 심박예비량 40–59%가 1차 기준입니다. 검사가 없거나, 베타차단제를 먹는데 현재 약물 상태의 검사가 없거나, COPD라면 자각인지도 12–14가 1차 기준입니다(COPD는 호흡곤란 4–6/10 병용).</p></div>
+      </div>
+      <div class="step reveal">
+        <div class="n">3</div>
+        <div><h3>운동과 정지 체크인</h3><p>운동 중에는 움직임 때문에 카메라 심박이 부정확하므로, 구간마다 12초 멈춰 심박·자각인지도·호흡곤란·경고 증상(COPD는 산소포화도)을 확인합니다. 이 심박은 회복기 값이라 운동 중보다 낮게 나옵니다. 커널이 계속·강도 하향·재확인·중단을 결정합니다.</p></div>
+      </div>
+      <div class="step reveal">
+        <div class="n">4</div>
+        <div><h3>기능평가와 기록</h3><p>준비운동 직후 30초 앉았다일어서기를 하고, 세션을 해시 체인 감사 기록(우발적 변경 탐지, 머리 해시는 따로 보관)과 HL7 FHIR R4 형식으로 내보냅니다.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="background:var(--surface-1); border-top:1px solid var(--border);">
+  <div class="wrap grid grid-2" style="align-items:center;">
+    <div class="reveal">
+      <p class="section-eyebrow">공학 논문 · CES</p>
+      <h2 class="section-title" style="margin-bottom:16px;">근거와 엔지니어링을 함께 기록합니다</h2>
+      <p style="color:var(--text-secondary); font-size:15.5px;">이 사이트는 경운대학교 "원격재활과 디지털치료기기" 수업의 기말 프로젝트이자 공학 논문의 구현물입니다. CES 2027 혁신상 접수는 2026년 8월 19일에 마감되어, 실측 검증을 마친 다음 버전으로 CES 2028 Digital Health 부문을 목표로 합니다. 출품 요건과 로드맵은 소개 페이지에 정리했습니다.</p>
+      <div class="hero-actions" style="margin-top:20px;">
+        <a class="btn btn-outline" href="about.html">소개 · CES 포지셔닝 보기 →</a>
+        <a class="btn btn-outline" href="technology.html">기술 아키텍처 보기 →</a>
+      </div>
+    </div>
+    <div class="card reveal">
+      <h3>정직성 원칙</h3>
+      <p>VitalLens는 <strong>연구 프로토타입</strong>이며 식품의약품안전처·FDA의 허가를 받은 의료기기가 아닙니다. 진단이 아닌 <em>운동 강도 보조 도구</em>로 설계했고, 주요 임상 수치는 원출처 링크와 함께 표기합니다. 1차 평가변수·대조군·표본 크기를 미리 정한 임상시험 없이 효과를 주장하지 않습니다.</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div>© 2026 VitalLens Project · 경운대학교 재활치료전공 · 비상업 연구 프로토타입 · <strong>의료기기 아님</strong> (진단·치료 목적 사용 금지)</div>
+    <div><a href="evidence.html">근거</a> · <a href="technology.html">기술</a> · <a href="validation.html">검증</a> · <a href="about.html">소개·한계</a> · <a href="https://github.com/y3korea/vitallens">소스 코드</a></div>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>

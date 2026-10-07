@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self' https://api.anthropic.com; object-src 'none'; base-uri 'self'; form-action 'none'">
+<title>AI 재활 코치 — VitalLens</title>
+<meta name="description" content="안전 결정은 결정론적 커널이, 코칭은 AI가 맡는 심폐 원격재활 에이전트. 도구 호출과 환자에게 가는 모든 문장이 커널을 통과하고 해시 체인 감사 기록에 남습니다.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22><rect width=%2232%22 height=%2232%22 rx=%228%22 fill=%22%23e34948%22/><path d=%22M6 17h4l2-6 4 12 3-9 2 3h5%22 stroke=%22white%22 stroke-width=%222.4%22 fill=%22none%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22/></svg>">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="VitalLens">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:title" content="AI 재활 코치 — VitalLens">
+<meta property="og:description" content="안전 결정은 결정론적 커널이, 코칭은 AI가 맡는 심폐 원격재활 에이전트. 도구 호출과 환자에게 가는 모든 문장이 커널을 통과하고 해시 체인 감사 기록에 남습니다.">
+<meta property="og:url" content="https://y3korea.github.io/vitallens/agent.html">
+<link rel="canonical" href="https://y3korea.github.io/vitallens/agent.html">
+<link rel="stylesheet" href="css/style.css">
+<script src="js/theme-init.js"></script>
+</head>
+<body>
+
+<a class="skip-link" href="#main">본문으로 건너뛰기</a>
+<nav class="site-nav" aria-label="주 메뉴">
+  <div class="wrap">
+    <a class="brand" href="index.html">
+      <svg class="mark" viewBox="0 0 32 32" fill="none" aria-hidden="true"><rect width="32" height="32" rx="9" fill="var(--cardiac)"/><path d="M6 17h4l2-6 4 12 3-9 2 3h5" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      VitalLens
+    </a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="index.html">홈</a></li>
+      <li><a href="evidence.html">근거</a></li>
+      <li><a href="technology.html">기술</a></li>
+      <li><a href="validation.html">검증</a></li>
+      <li><a href="agent.html">AI 코치</a></li>
+      <li><a href="demo.html">라이브 데모</a></li>
+      <li><a href="about.html">소개</a></li>
+    </ul>
+    <div style="display:flex; align-items:center;">
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="밝은/어두운 테마 전환">🌙</button>
+      <button class="nav-toggle-btn" type="button" data-nav-toggle aria-label="메뉴 열기" aria-expanded="false" aria-controls="nav-links">☰</button>
+    </div>
+  </div>
+</nav>
+
+<main id="main">
+<header class="hero" style="padding:56px 0 20px;">
+  <div class="wrap">
+    <span class="hero-badge">AI 재활 코치 · 안전 경계가 있는 에이전트</span>
+    <h1 style="font-size:clamp(28px,4vw,42px);">코칭은 AI가, 안전 결정은 규칙이</h1>
+    <p class="lead">운동 처방을 만든 LLM 연구 24편 중 14편(58%)이 금기 운동 같은 안전 결함을 보고했습니다(He et al., 2026). 그래서 VitalLens의 플래너는 <strong>도구로만 행동하고, 환자에게 가는 문장도 도구로만</strong> 보낼 수 있습니다. 모든 제안은 근거 기반의 결정론적 <strong>안전 커널</strong>을 먼저 통과합니다. 커널은 제안을 거부하거나 세션을 멈출 수 있고, 플래너는 그 결정을 뒤집을 수 없습니다.</p>
+    <p class="small">기본 플래너는 <strong>규칙 기반(AI 아님)</strong>이라 키 없이 돌아갑니다. 같은 도구·커널로 Claude(내 API 키)나 외부 MCP 클라이언트(<a href="https://github.com/y3korea/vitallens/blob/main/mcp/server.js"><code>mcp/server.js</code></a>)가 플래너 자리에 들어올 수 있습니다.</p>
+  </div>
+</header>
+
+<section class="tight">
+  <div class="wrap">
+    <figure class="card" style="margin:0;">
+      <figcaption class="kicker" style="margin-bottom:10px;">하네스 구조 — 모든 경로가 하나의 관문을 지납니다</figcaption>
+      <svg viewBox="0 0 900 250" class="diagram diagram-wide" role="img" aria-labelledby="harness-desc">
+        <desc id="harness-desc">플래너가 도구 호출과 환자에게 할 문장을 제안하면 안전 커널이 허용 또는 거부하고, 허용된 호출만 도구가 실행하며, 체크인 결과는 커널이 다시 평가해 계속·하향·재확인·중단을 결정합니다. 제안·판정·결과와 모델 메모가 해시 체인 감사 기록에 남습니다.</desc>
+        <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--text-secondary)"/></marker></defs>
+        <g font-family="var(--font)" font-size="13">
+          <rect x="10" y="40" width="170" height="90" rx="12" fill="var(--surface-2)" stroke="var(--border)"/>
+          <text x="95" y="72" text-anchor="middle" font-weight="700" fill="var(--text-primary)">플래너</text>
+          <text x="95" y="94" text-anchor="middle" fill="var(--text-secondary)">규칙 기반 · Claude</text>
+          <text x="95" y="114" text-anchor="middle" fill="var(--text-secondary)">· MCP 클라이언트</text>
+          <rect x="250" y="30" width="200" height="110" rx="12" fill="var(--cardiac-soft)" stroke="var(--cardiac)" stroke-width="1.5"/>
+          <text x="350" y="60" text-anchor="middle" font-weight="800" fill="var(--text-primary)">안전 커널</text>
+          <text x="350" y="82" text-anchor="middle" fill="var(--text-secondary)">사전 관문: 형식·순서·범위·문장</text>
+          <text x="350" y="102" text-anchor="middle" fill="var(--text-secondary)">사후 평가: 계속·하향·재확인·중단</text>
+          <text x="350" y="122" text-anchor="middle" fill="var(--text-secondary)">근거 기반 규칙 · 결정론적</text>
+          <rect x="520" y="40" width="170" height="90" rx="12" fill="var(--surface-2)" stroke="var(--border)"/>
+          <text x="605" y="72" text-anchor="middle" font-weight="700" fill="var(--text-primary)">도구</text>
+          <text x="605" y="94" text-anchor="middle" fill="var(--text-secondary)">안전 확인 · 운동 단계</text>
+          <text x="605" y="114" text-anchor="middle" fill="var(--text-secondary)">정지 체크인 · STS · 안내</text>
+          <rect x="740" y="40" width="150" height="90" rx="12" fill="var(--pulmonary-soft)" stroke="var(--pulmonary)" stroke-width="1.5"/>
+          <text x="815" y="72" text-anchor="middle" font-weight="700" fill="var(--text-primary)">기록</text>
+          <text x="815" y="94" text-anchor="middle" fill="var(--text-secondary)">해시 체인 감사 로그</text>
+          <text x="815" y="114" text-anchor="middle" fill="var(--text-secondary)">FHIR R4 내보내기</text>
+          <line x1="180" y1="70" x2="246" y2="70" stroke="var(--text-secondary)" stroke-width="2" marker-end="url(#ah)"/>
+          <text x="213" y="60" text-anchor="middle" font-size="12" fill="var(--text-secondary)">제안</text>
+          <line x1="450" y1="70" x2="516" y2="70" stroke="var(--text-secondary)" stroke-width="2" marker-end="url(#ah)"/>
+          <text x="483" y="60" text-anchor="middle" font-size="12" fill="var(--text-secondary)">허용분만</text>
+          <line x1="690" y1="85" x2="736" y2="85" stroke="var(--text-secondary)" stroke-width="2" marker-end="url(#ah)"/>
+          <path d="M605 130 C605 200, 350 200, 350 144" fill="none" stroke="var(--text-secondary)" stroke-width="2" marker-end="url(#ah)"/>
+          <text x="478" y="206" text-anchor="middle" font-size="12" fill="var(--text-secondary)">체크인 결과 → 커널 재평가</text>
+          <path d="M250 110 C200 170, 120 170, 95 134" fill="none" stroke="var(--cardiac-text)" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#ah)"/>
+          <text x="140" y="190" text-anchor="middle" font-size="12" fill="var(--cardiac-text)">거부 사유·허용 한계 반환</text>
+        </g>
+      </svg>
+      <svg viewBox="0 0 360 560" class="diagram diagram-tall" role="img" aria-labelledby="harness-desc-tall">
+        <desc id="harness-desc-tall">위에서 아래로: 플래너가 제안하면 안전 커널이 허용 또는 거부하고, 허용된 호출만 도구가 실행하며, 체크인 결과는 커널이 다시 평가합니다. 모든 단계가 기록에 남습니다.</desc>
+        <defs><marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--text-secondary)"/></marker></defs>
+        <g font-family="var(--font)" font-size="15">
+          <rect x="30" y="10" width="300" height="80" rx="12" fill="var(--surface-2)" stroke="var(--border)"/>
+          <text x="180" y="42" text-anchor="middle" font-weight="700" fill="var(--text-primary)">플래너</text>
+          <text x="180" y="68" text-anchor="middle" fill="var(--text-secondary)">규칙 기반 · Claude · MCP</text>
+          <line x1="180" y1="90" x2="180" y2="128" stroke="var(--text-secondary)" stroke-width="2" marker-end="url(#ah2)"/>
+          <text x="194" y="115" font-size="13" fill="var(--text-secondary)">제안</text>
+          <rect x="30" y="132" width="300" height="110" rx="12" fill="var(--cardiac-soft)" stroke="var(--cardiac)" stroke-width="1.5"/>
+          <text x="180" y="164" text-anchor="middle" font-weight="800" fill="var(--text-primary)">안전 커널</text>
+          <text x="180" y="190" text-anchor="middle" fill="var(--text-secondary)">사전: 형식·순서·범위·문장</text>
+          <text x="180" y="214" text-anchor="middle" fill="var(--text-secondary)">사후: 계속·하향·재확인·중단</text>
+          <line x1="180" y1="242" x2="180" y2="280" stroke="var(--text-secondary)" stroke-width="2" marker-end="url(#ah2)"/>
+          <text x="194" y="267" font-size="13" fill="var(--text-secondary)">허용분만</text>
+          <rect x="30" y="284" width="300" height="90" rx="12" fill="var(--surface-2)" stroke="var(--border)"/>
+          <text x="180" y="316" text-anchor="middle" font-weight="700" fill="var(--text-primary)">도구</text>
+          <text x="180" y="342" text-anchor="middle" fill="var(--text-secondary)">체크인 결과는 커널이 재평가</text>
+          <line x1="180" y1="374" x2="180" y2="412" stroke="var(--text-secondary)" stroke-width="2" marker-end="url(#ah2)"/>
+          <rect x="30" y="416" width="300" height="90" rx="12" fill="var(--pulmonary-soft)" stroke="var(--pulmonary)" stroke-width="1.5"/>
+          <text x="180" y="448" text-anchor="middle" font-weight="700" fill="var(--text-primary)">기록</text>
+          <text x="180" y="474" text-anchor="middle" fill="var(--text-secondary)">해시 체인 감사 · FHIR R4</text>
+          <text x="180" y="540" text-anchor="middle" font-size="13" fill="var(--cardiac-text)">거부되면 사유와 허용 한계가 플래너로 돌아갑니다</text>
+        </g>
+      </svg>
+      <p class="small" style="margin-top:6px;">도구 정의는 MCP <code>tools/list</code> 응답 형식의 <a href="mcp/tools.json">mcp/tools.json</a>으로 공개하고, 같은 도구·커널을 여는 stdio MCP 서버(<code>node mcp/server.js</code>, 가상 환자)도 함께 둡니다. 같은 정의가 이 페이지의 에이전트를 구동합니다.</p>
+    </figure>
+  </div>
+</section>
+
+<section class="tight">
+  <div class="wrap grid grid-2" style="align-items:start;">
+    <div class="card">
+      <h2 class="h-card">세션 설정</h2>
+      <div class="form-grid" style="margin-top:12px;">
+        <label for="p-id">환자 ID (가명)</label><input id="p-id" type="text" value="P01" maxlength="12" autocomplete="off" pattern="[A-Za-z0-9_\-]{1,12}" aria-describedby="p-id-hint"><span></span><span class="small" id="p-id-hint">영문·숫자 12자 이내 가명(예: P01). 실명 금지.</span>
+        <label for="p-age">나이</label><input id="p-age" type="number" value="62" min="18" max="100">
+        <label for="p-rhr">안정시 심박수</label><input id="p-rhr" type="number" value="70" min="40" max="120">
+        <label for="p-hrmax">운동부하검사 최대심박</label><input id="p-hrmax" type="number" min="80" max="220" placeholder="없으면 비워두세요 (RPE가 1차 기준)">
+        <span class="form-label">검사 조건</span><label class="check"><input type="checkbox" id="p-onmeds"> 검사를 현재 복용 약물 상태에서 시행</label>
+        <label for="p-risk">위험군 (의료진 입력)</label>
+        <select id="p-risk"><option value="">선택 안 함 — 세션 불가</option><option value="low" selected>저위험</option><option value="mid">중위험</option><option value="high">고위험</option></select>
+        <span class="form-label">감독</span><label class="check"><input type="checkbox" id="p-supervised"> 의료진이 계획을 승인하고 실시간 화상으로 감독 (중위험 필수)</label>
+        <span class="form-label">임상 조건</span>
+        <div><label class="check"><input type="checkbox" id="p-beta"> 베타차단제 복용</label><label class="check"><input type="checkbox" id="p-copd"> COPD·저산소혈증</label></div>
+        <label for="src">환자 입력</label>
+        <select id="src">
+          <option value="vp-normal">가상 환자 — 정상 세션</option>
+          <option value="vp-chest_pain">가상 환자 — 앉았다일어서기 뒤 흉통 보고</option>
+          <option value="vp-high_rpe">가상 환자 — 첫 운동 구간 뒤 RPE 17</option>
+          <option value="vp-rpe_climb">가상 환자 — 계속 힘들다고 보고(하향 3회 → 중단)</option>
+          <option value="vp-low_spo2">가상 환자 — 산소포화도 88%</option>
+          <option value="vp-tachy">가상 환자 — 심박이 최대심박을 넘음</option>
+          <option value="vp-copd_no_spo2">가상 환자 — COPD, 산소측정기 값 없음 (COPD 체크 필요)</option>
+          <option value="vp-hr_withheld">가상 환자 — 카메라 심박 보류(신호 불량)</option>
+          <option value="vp-red_flag_today">가상 환자 — 오늘 새 흉통 (세션 전 확인에서 걸림)</option>
+          <option value="vp-redteam">적대적 시험 — 플래너가 과도한 강도·위험한 문장 제안 (규칙 플래너)</option>
+          <option value="real">실제 사용자 — 카메라 측정 + 직접 입력</option>
+        </select>
+        <label for="planner">플래너</label>
+        <select id="planner"><option value="rules">규칙 기반 (AI 아님 · 키 불필요)</option><option value="claude">Claude (내 API 키)</option></select>
+      </div>
+      <div id="real-opts" hidden style="margin-top:14px;">
+        <div class="callout callout-warn" style="font-size:13px; padding:12px 14px;"><span class="ic" aria-hidden="true">⚠️</span><div>연구용 시제품입니다. 의료진의 위험 층화와 운동 허가 없이 쓰지 마세요. 세션은 실제 시간(약 25분)으로 진행되며, 운동 중에도 ‘증상이 있어요’·‘그만하기’를 언제든 누를 수 있습니다.</div></div>
+        <label class="check" style="margin-top:10px;"><input type="checkbox" id="risk-confirm"> 나이·안정시 심박·위험군은 담당 의료진이 정한 값입니다</label>
+        <label class="check" style="margin-top:6px;"><input type="checkbox" id="fast"> 시연용 빠르게 진행 (1분 = 6초 — 감사 기록·FHIR에 시연 세션으로 표시)</label>
+        <p class="small" id="insecure-note" hidden>이 주소는 보안 컨텍스트가 아니어서 카메라를 쓸 수 없습니다. 심박은 측정기 값을 직접 입력하세요.</p>
+      </div>
+      <div id="claude-opts" hidden style="margin-top:14px;">
+        <div class="callout callout-info" style="font-size:13px; padding:12px 14px;"><span class="ic" aria-hidden="true">🔑</span><div>키는 이 탭의 메모리에만 두고 저장하지 않으며, 이 브라우저에서 <code>api.anthropic.com</code>으로만 전송됩니다(SDK는 이 사이트에 함께 올린 파일을 쓰고, 페이지의 CSP가 다른 곳으로의 연결을 막습니다). 사용량 한도를 걸어둔 키를 쓰세요. 비용은 키 소유자에게 청구됩니다.<br><strong>Claude에 보내는 항목:</strong> <span id="claude-data-list"></span>. 환자 ID와 영상은 보내지 않습니다.</div></div>
+        <div class="form-grid" style="margin-top:10px;">
+          <label for="api-key">API 키</label>
+          <div style="display:flex; gap:8px;"><input id="api-key" type="password" autocomplete="off" spellcheck="false" placeholder="sk-ant-..."><button class="btn btn-outline btn-sm" id="key-set" type="button">적용</button></div>
+          <label for="model">모델 ID</label><input id="model" type="text" value="claude-opus-5" spellcheck="false">
+        </div>
+        <label class="check" id="consent-row" style="margin-top:10px;"><input type="checkbox" id="consent"> 위 항목(건강정보)이 미국의 Anthropic으로 전송되는 데 동의합니다 — 가상 환자 모드에서도 위 프로필 값이 전송되므로 실제 환자 정보를 넣지 마세요</label>
+        <p class="small" id="redteam-note" hidden>적대적 시험 시나리오는 규칙 플래너용입니다. Claude로 실행하면 정상 가상 환자로 진행합니다.</p>
+        <p class="small" id="key-status" role="status" aria-live="polite"></p>
+      </div>
+      <div style="display:flex; gap:10px; margin-top:16px;">
+        <button class="btn btn-primary btn-sm" id="run" type="button">세션 실행</button>
+        <button class="btn btn-outline btn-sm" id="stop" type="button" disabled>중지</button>
+      </div>
+      <p class="small" id="run-status" role="status" aria-live="polite" tabindex="-1" style="margin-top:8px;">가상 환자 시나리오는 몇 초 만에 끝나며, 커널이 어떻게 개입하는지 보여줍니다.</p>
+    </div>
+    <div class="card" style="padding:18px;">
+      <h2 class="h-card">진행 기록</h2>
+      <div id="timeline" class="timeline" role="log" aria-live="off" aria-label="세션 진행 기록"><p class="small">세션을 실행하면 플래너의 제안, 커널의 판정, 측정 결과가 여기에 순서대로 나타납니다.</p></div>
+      <p class="sr-only" id="kernel-sr" aria-live="assertive"></p>
+    </div>
+  </div>
+</section>
+
+<section class="tight">
+  <div class="wrap grid grid-2" style="align-items:start;">
+    <div class="card">
+      <h2 class="h-card">감사 기록 <span class="small">(<span id="audit-count">0</span>건)</span></h2>
+      <p>각 기록은 직전 기록의 SHA-256 해시를 포함해 순서·내용의 우발적 변경과 단순 편집을 드러냅니다. 키 없는 해시 체인이라 파일을 가진 사람이 체인 전체를 다시 계산하는 위조는 막지 못하므로, 세션이 끝나면 <strong>머리 해시</strong>를 따로 보관하세요(FHIR 내보내기의 Provenance에도 들어갑니다).</p>
+      <p class="small">머리 해시: <span class="mono" id="head-hash"></span></p>
+      <div style="display:flex; gap:8px; flex-wrap:wrap; margin:12px 0;">
+        <button class="btn btn-outline btn-sm" id="verify" type="button" disabled>이 기록 검증</button>
+        <button class="btn btn-outline btn-sm" id="dl-audit" type="button" disabled>감사 기록 JSON</button>
+        <button class="btn btn-outline btn-sm" id="dl-fhir" type="button" disabled>FHIR R4 Bundle</button>
+      </div>
+      <p class="small" id="verify-status" role="status" aria-live="polite"></p>
+      <details style="margin:10px 0;">
+        <summary class="small">내려받은 감사 기록 파일 검증하기</summary>
+        <div class="form-grid" style="margin-top:8px;">
+          <label for="expected-head">따로 보관한 머리 해시 (선택)</label><input id="expected-head" type="text" spellcheck="false" autocomplete="off" placeholder="64자리 16진수">
+        </div>
+        <button class="btn btn-outline btn-sm" id="audit-import-btn" type="button" style="margin-top:8px;">JSON 파일 불러와 검증</button>
+        <input type="file" id="audit-file" accept=".json,application/json" class="sr-only" tabindex="-1" aria-hidden="true">
+        <p class="small" id="import-status" role="status" aria-live="polite"></p>
+      </details>
+      <div class="table-scroll" style="max-height:320px; overflow:auto;">
+        <table class="data-table compact"><caption class="sr-only">감사 기록</caption>
+          <thead><tr><th scope="col">#</th><th scope="col">주체</th><th scope="col">유형</th><th scope="col">도구</th><th scope="col">해시</th></tr></thead>
+          <tbody id="audit-body"></tbody></table>
+      </div>
+    </div>
+    <div class="card">
+      <h2 class="h-card">안전 커널 규칙</h2>
+      <p>수치는 가이드라인 출처와 함께 코드 한곳(<code>SAFETY_RULES</code>)에 있습니다. "설계 선택"이라고 적힌 값은 가이드라인 기준이 아니라 VitalLens가 보수적으로 정한 값입니다.</p>
+      <div class="table-scroll" style="margin-top:10px;"><table class="data-table compact"><caption class="sr-only">안전 규칙</caption>
+        <thead><tr><th scope="col">규칙</th><th scope="col">값</th><th scope="col">출처</th></tr></thead><tbody id="rules-body"></tbody></table></div>
+      <p class="small" style="margin-top:10px;"><code>npm test</code>가 안전 시나리오 19종, 스크립트로 만든 적대적 제안 6종(가짜 LLM 역할 — 실제 모델은 호출하지 않음), 규격 검사 6종(FHIR·MCP 형식·감사 체인)과 MCP 서버 프로토콜 검사를 자동으로 돌립니다. 실제 LLM이 이 커널을 우회하지 못한다는 증명은 아닙니다.</p>
+    </div>
+  </div>
+</section>
+
+<section class="tight">
+  <div class="wrap grid grid-2" style="align-items:start;">
+    <div class="card">
+      <h2 class="h-card">도구 목록 (MCP 도구 정의 형식)</h2>
+      <div class="table-scroll"><table class="data-table compact"><caption class="sr-only">도구</caption>
+        <thead><tr><th scope="col">도구</th><th scope="col">성격 · 설명</th></tr></thead><tbody id="tool-list"></tbody></table></div>
+    </div>
+    <div class="card">
+      <h2 class="h-card">설계 근거</h2>
+      <ul class="ref-list">
+        <li>LLM 운동처방 연구의 58%에서 안전 결함 보고, 중·고위험 환자는 전문가 검토 필수 권고 — He et al., <em>Biology of Sport</em>, 2026. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC13343266/" target="_blank" rel="noopener">원문 ↗</a></li>
+        <li>사람이 AI 출력을 무시·무효화·중단할 수 있어야 한다는 인적 감독 요건 — EU AI Act 제14조. <a href="https://artificialintelligenceact.eu/article/14/" target="_blank" rel="noopener">조문 ↗</a></li>
+        <li>식품의약품안전처, 「생성형 인공지능 의료기기 허가·심사 가이드라인」(2025-01-24). <a href="https://www.mfds.go.kr/brd/m_1060/view.do?seq=15628" target="_blank" rel="noopener">원문 ↗</a></li>
+        <li>심장재활에서 LLM의 적시 개입 결정 평가 — Haag et al., CHI 2025. <a href="https://arxiv.org/abs/2402.08658" target="_blank" rel="noopener">arXiv ↗</a></li>
+        <li>함께 읽기: 장시간 실행 에이전트를 위한 하네스 설계 — Anthropic Engineering, 2025. <a href="https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents" target="_blank" rel="noopener">글 ↗</a></li>
+      </ul>
+      <p class="small">이 페이지에서 "하네스"는 VitalLens의 작업 정의입니다: 플래너와 실제 세계 사이에서 도구 실행·권한 관문·감사 기록을 맡는 코드. 커널은 인적 감독을 대신하지 않습니다 — 중위험 환자는 의료진 승인과 실시간 감독이 있어야 세션이 열리고, 사람(환자·의료진)은 언제든 중지할 수 있습니다. 위 규정들이 "결정론적 규칙 계층"을 직접 요구하지는 않으며, 이는 인적 감독·위험 관리 요구에 대한 설계 대응입니다.</p>
+    </div>
+  </div>
+</section>
+</main>
+
+<dialog id="safety-dialog" aria-labelledby="sc-title">
+  <h2 id="sc-title">세션 전 안전 확인</h2>
+  <p class="small">오늘 운동해도 되는지, 문제가 생기면 어떻게 할지 먼저 확인합니다.</p>
+  <fieldset class="sym">
+    <legend>오늘 해당하는 것이 있으면 체크하세요</legend>
+    <label class="check"><input type="checkbox" id="sc-chest"> 오늘 새로 생긴 흉통·가슴 답답함</label>
+    <label class="check"><input type="checkbox" id="sc-dysp"> 평소보다 심한 숨참</label>
+    <label class="check"><input type="checkbox" id="sc-unwell"> 열·어지러움 등 몸 상태가 좋지 않음</label>
+  </fieldset>
+  <fieldset class="sym">
+    <legend>준비 확인</legend>
+    <label class="check"><input type="checkbox" id="sc-phone"> 휴대전화가 손 닿는 곳에 있다 (필수)</label>
+    <label class="check"><input type="checkbox" id="sc-space"> 주변을 치웠고, 팔걸이 없는 의자를 벽에 붙여 두었다 (필수)</label>
+    <label class="check"><input type="checkbox" id="sc-119"> 흉통·실신 전조가 생기면 119에 전화한다 (필수)</label>
+    <label class="check"><input type="checkbox" id="sc-person"> 함께 있거나 바로 연락할 수 있는 사람이 있다</label>
+    <label class="check"><input type="checkbox" id="sc-meds"> 평소 먹는 약을 오늘도 먹었다</label>
+  </fieldset>
+  <div class="form-grid"><label for="sc-spo2" id="sc-spo2-label">안정 시 SpO₂</label><input id="sc-spo2" type="number" min="0" max="100" inputmode="numeric" placeholder="예: 96"></div>
+  <p class="dlg-error" id="sc-error" role="alert"></p>
+  <div class="dlg-actions">
+    <button class="btn btn-primary btn-sm" id="sc-ok" type="button">확인 완료</button>
+    <button class="btn btn-outline btn-sm" id="sc-decline" type="button">오늘은 하지 않기</button>
+  </div>
+</dialog>
+
+<dialog id="phase-dialog" aria-labelledby="ph-title" aria-describedby="ph-instr ph-targets">
+  <h2 id="ph-title">운동</h2>
+  <p class="tl-instr" id="ph-instr" style="font-size:16px;"></p>
+  <div class="phase-timer" id="ph-timer" role="timer" aria-live="off">0:00</div>
+  <p class="phase-targets" id="ph-targets"></p>
+  <div class="dlg-actions">
+    <button class="btn btn-outline btn-sm" id="ph-next" type="button">다음 단계로</button>
+    <button class="btn btn-cardiac btn-sm" id="ph-symptom" type="button">증상이 있어요</button>
+    <button class="btn btn-outline btn-sm" id="ph-stop" type="button">그만하기</button>
+  </div>
+</dialog>
+
+<dialog id="checkin-dialog" aria-labelledby="ci-title" aria-describedby="ci-desc">
+  <h2 id="ci-title">정지 체크인</h2>
+  <p class="small" id="ci-desc"><span id="ci-reason"></span> — 운동을 멈추고 카메라 가까이에서 얼굴을 타원 안에 맞춘 뒤 12초간 움직이지 마세요. 이 심박은 운동 직후 회복기 값이라 운동 중보다 낮게 나옵니다.</p>
+  <div class="ci-video-wrap"><video id="ci-video" muted playsinline aria-label="카메라 미리보기"></video><canvas id="ci-canvas" hidden></canvas><div class="roi-oval" aria-hidden="true"></div></div>
+  <div style="display:flex; gap:10px; align-items:center; margin:8px 0;">
+    <button class="btn btn-cardiac btn-sm" id="ci-measure" type="button">12초 심박 측정</button>
+    <span class="bpm-sm" id="ci-hr">--</span><span class="small">bpm</span>
+  </div>
+  <p class="small" id="ci-status" role="status" aria-live="polite"></p>
+  <div class="form-grid">
+    <label for="ci-hr-manual">심박 (측정기 값, 선택)</label><input id="ci-hr-manual" type="number" min="1" max="300" inputmode="numeric" placeholder="카메라 대신 입력">
+    <label for="ci-spo2" id="ci-spo2-label">SpO₂</label><input id="ci-spo2" type="number" min="0" max="100" inputmode="numeric" placeholder="예: 96">
+  </div>
+  <fieldset class="scale"><legend>지금 얼마나 힘든가요? (자각인지도, Borg 6–20)</legend><div class="scale-grid" id="ci-rpe"></div></fieldset>
+  <fieldset class="scale"><legend>지금 숨찬 정도는? (수정 Borg 0–10)</legend><div class="scale-grid" id="ci-dys"></div></fieldset>
+  <fieldset class="sym">
+    <legend>지금 다음 증상이 있나요?</legend>
+    <label class="check"><input type="checkbox" name="ci-sym" value="chest_pain"> 흉통·흉부 압박감</label>
+    <label class="check"><input type="checkbox" name="ci-sym" value="presyncope"> 어지러움·실신할 것 같은 느낌</label>
+    <label class="check"><input type="checkbox" name="ci-sym" value="severe_dyspnea"> 말을 이어갈 수 없을 정도의 호흡곤란</label>
+    <label class="check"><input type="checkbox" name="ci-sym" value="palpitations"> 갑작스러운 두근거림·불규칙한 맥박</label>
+    <label class="check"><input type="checkbox" name="ci-sym" value="confusion"> 혼란·식은땀·창백해짐</label>
+    <label class="check"><input type="checkbox" name="ci-sym" value="wants_to_stop"> 그만하고 싶다</label>
+  </fieldset>
+  <p class="dlg-error" id="ci-error" role="alert"></p>
+  <div class="dlg-actions">
+    <button class="btn btn-primary btn-sm" id="ci-submit" type="button">체크인 제출</button>
+    <button class="btn btn-outline btn-sm" id="ci-cancel" type="button">세션 중단</button>
+  </div>
+</dialog>
+
+<dialog id="sts-dialog" aria-labelledby="sd-title" aria-describedby="sd-desc">
+  <h2 id="sd-title">30초 앉았다일어서기</h2>
+  <p class="small" id="sd-desc">팔걸이 없는 의자를 벽에 붙여 고정하세요. 팔짱을 끼고 30초 동안 완전히 일어섰다 앉기를 최대한 여러 번 반복합니다. 흉통·어지러움·심한 숨참이 생기면 즉시 멈추고 ‘증상이 있어요’를 누르세요.</p>
+  <div class="big-timer" id="sd-timer" role="timer" aria-live="off">0:30</div>
+  <button class="btn btn-pulmonary btn-sm" id="sd-start" type="button">시작</button>
+  <div class="form-grid" style="margin-top:12px;"><label for="sd-count">완전히 일어선 횟수</label><input id="sd-count" type="number" min="0" max="40" inputmode="numeric"></div>
+  <p class="dlg-error" id="sd-error" role="alert"></p>
+  <div class="dlg-actions">
+    <button class="btn btn-primary btn-sm" id="sd-submit" type="button">제출</button>
+    <button class="btn btn-cardiac btn-sm" id="sd-symptom" type="button">증상이 있어요</button>
+    <button class="btn btn-outline btn-sm" id="sd-cancel" type="button">그만하기</button>
+    <button class="btn btn-outline btn-sm" id="sd-skip" type="button">검사 건너뛰기</button>
+  </div>
+</dialog>
+
+<dialog id="msg-dialog" aria-labelledby="msg-from" aria-describedby="msg-text">
+  <h2 id="msg-from">안내</h2>
+  <p class="tl-instr" id="msg-text" style="font-size:17px;" aria-live="polite"></p>
+  <div class="dlg-actions"><button class="btn btn-primary btn-sm" id="msg-ok" type="button">확인</button></div>
+</dialog>
+
+<dialog id="stop-dialog" role="alertdialog" aria-labelledby="stop-title" aria-describedby="stop-text">
+  <h2 id="stop-title">🛑 운동을 멈추세요</h2>
+  <p class="tl-instr" id="stop-text" tabindex="-1" style="font-size:17px;"></p>
+  <p class="small" id="stop-reason"></p>
+  <div class="dlg-actions"><button class="btn btn-primary btn-sm" id="stop-ok" type="button">확인했습니다</button></div>
+</dialog>
+
+<footer>
+  <div class="wrap">
+    <div>© 2026 VitalLens Project · 경운대학교 재활치료전공 · 비상업 연구 프로토타입 · <strong>의료기기 아님</strong> (진단·치료 목적 사용 금지)</div>
+    <div><a href="evidence.html">근거</a> · <a href="technology.html">기술</a> · <a href="validation.html">검증</a> · <a href="about.html">소개·한계</a> · <a href="https://github.com/y3korea/vitallens">소스 코드</a></div>
+  </div>
+</footer>
+
+<script src="js/rppg-core.js"></script>
+<script src="js/agent-core.js"></script>
+<script src="js/main.js"></script>
+<script src="js/agent-ui.js"></script>
+</body>
+</html>

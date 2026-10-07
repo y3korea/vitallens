@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
+<title>기술 아키텍처 — VitalLens</title>
+<meta name="description" content="rPPG 심박 추정 파이프라인, 카메라 기반 기능평가 로드맵, 3계층 안전 설계, 그리고 정직하게 밝힌 한계.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22><rect width=%2232%22 height=%2232%22 rx=%228%22 fill=%22%23e34948%22/><path d=%22M6 17h4l2-6 4 12 3-9 2 3h5%22 stroke=%22white%22 stroke-width=%222.4%22 fill=%22none%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22/></svg>">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="VitalLens">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:title" content="기술 아키텍처 — VitalLens">
+<meta property="og:description" content="rPPG 심박 추정 파이프라인, 카메라 기반 기능평가 로드맵, 3계층 안전 설계, 그리고 정직하게 밝힌 한계.">
+<meta property="og:url" content="https://y3korea.github.io/vitallens/technology.html">
+<link rel="canonical" href="https://y3korea.github.io/vitallens/technology.html">
+<link rel="stylesheet" href="css/style.css">
+<script src="js/theme-init.js"></script>
+</head>
+<body>
+
+<a class="skip-link" href="#main">본문으로 건너뛰기</a>
+<nav class="site-nav" aria-label="주 메뉴">
+  <div class="wrap">
+    <a class="brand" href="index.html">
+      <svg class="mark" viewBox="0 0 32 32" fill="none" aria-hidden="true"><rect width="32" height="32" rx="9" fill="var(--cardiac)"/><path d="M6 17h4l2-6 4 12 3-9 2 3h5" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      VitalLens
+    </a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="index.html">홈</a></li>
+      <li><a href="evidence.html">근거</a></li>
+      <li><a href="technology.html">기술</a></li>
+      <li><a href="validation.html">검증</a></li>
+      <li><a href="agent.html">AI 코치</a></li>
+      <li><a href="demo.html">라이브 데모</a></li>
+      <li><a href="about.html">소개</a></li>
+    </ul>
+    <div style="display:flex; align-items:center;">
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="밝은/어두운 테마 전환">🌙</button>
+      <button class="nav-toggle-btn" type="button" data-nav-toggle aria-label="메뉴 열기" aria-expanded="false" aria-controls="nav-links">☰</button>
+    </div>
+  </div>
+</nav>
+
+<main id="main">
+
+<header class="hero" style="padding:56px 0 20px;">
+  <div class="wrap">
+    <span class="hero-badge">기술 아키텍처</span>
+    <h1 style="font-size:clamp(28px,4vw,42px);">카메라 한 대로 심박을 읽고, 에이전트를 안전하게 묶는 방법</h1>
+    <p class="lead">이 페이지는 공학 논문 부록에 준하는 상세도로, VitalLens의 신호처리 파이프라인(v1.6)·기능평가·시스템과 에이전트 아키텍처·그리고 현재 한계를 문헌과 함께 기술합니다. 카메라로 재는 것은 <strong>멈춘 상태의 심박</strong> 하나뿐이며, 산소포화도·호흡수·심전도 리듬은 재지 않습니다.</p>
+  </div>
+</header>
+
+<section class="tight">
+  <div class="wrap">
+    <p class="section-eyebrow">01 · rPPG 파이프라인</p>
+    <h2 class="section-title">원격 광용적맥파(rPPG)로 심박 추정하기</h2>
+    <p class="section-lead">피부 아래 혈류량 변화가 만드는 미세한 색 변화를, 카메라의 녹색 채널이 가장 강하게 포착한다는 원리(Verkruysse et al., 2008)를 이용합니다.</p>
+    <div class="steps">
+      <div class="step reveal"><div class="n">1</div><div><h3>프레임 캡처 &amp; ROI 평균</h3><p>getUserMedia로 웹캠 스트림(320×240)을 받아 초당 20회 캔버스에 그리고, 화면 중앙의 고정 사각 영역(가로 36% × 세로 50%)의 R·G·B 평균을 기록합니다. 얼굴 검출은 하지 않으므로 사용자가 얼굴을 가이드 타원에 맞춰야 합니다. 기본 추정에는 혈류 신호가 가장 강한 녹색 채널을 씁니다(Verkruysse et al., 2008).</p></div></div>
+      <div class="step reveal"><div class="n">2</div><div><h3>12초 시간 창 &amp; 균일 재표본화</h3><p>표본은 개수가 아니라 <strong>시간</strong>으로 잘라 항상 최근 12초를 유지합니다(화면 주사율과 무관). 브라우저 타이머는 수 ms씩 흔들리고 가끔 수십 ms 멈추므로, 실제 타임스탬프로 선형 보간해 정확히 20 Hz 격자로 옮긴 뒤 분석합니다. 창이 다 차기 전에는 숫자를 내지 않습니다 — 품질 기준을 12초 창에서만 조정했기 때문입니다.</p></div></div>
+      <div class="step reveal"><div class="n">3</div><div><h3>영위상 대역통과 필터</h3><p>4차 버터워스 고역·저역 필터(0.67–3.0 Hz, 40–180 bpm)를 앞뒤로 두 번 적용해 위상 왜곡 없이 호흡에 의한 기저선 흔들림(약 0.25 Hz)과 고주파 잡음을 제거합니다. 차단 주파수에서 이득 0.5, 호흡 대역 0으로 단위 테스트합니다.</p></div></div>
+      <div class="step reveal"><div class="n">4</div><div><h3>스펙트럼 추정 &amp; 품질 기준</h3><p>12초 창에 한(Hann) 창을 씌우고 0.01 Hz(0.6 bpm) 간격으로 스펙트럼을 계산해 최대 봉우리를 심박으로 봅니다. 봉우리와 대역 안 모든 배음 주변 에너지를 나머지와 비교한 스펙트럼 SNR이 <strong>2 dB 미만이면 숫자를 내지 않고 "측정 보류"</strong>합니다. 이 SNR은 de Haan &amp; Jeanne(2013)의 지표를 변형한 것입니다: 원래는 기준 심박을 중심으로 재는 정확도 지표이지만, 여기서는 추정 봉우리를 중심으로 하므로 <em>봉우리가 얼마나 뚜렷한가</em>를 나타낼 뿐 정답 여부를 보장하지 않고, 주기적 움직임은 걸러내지 못합니다. 2 dB는 5겹 교차검증에서 "정답 − 3 × 오답"을 최대화하는 설계 가중치(오답 1건의 손해 = 보류 4건)로 골랐습니다.</p></div></div>
+    </div>
+    <div class="grid grid-2" style="margin-top:22px;">
+      <div class="callout callout-info"><span class="ic" aria-hidden="true">🔧</span><div><strong>왜 바꿨나.</strong> 첫 데모(v1)는 시간 영역 피크 계수였는데, 시뮬레이션에서 늘 숫자를 내는 문제와 (이 맥파 모델에서) 50–60 bpm의 이완기 봉우리를 한 번 더 세는 결함이 드러났습니다. 교차검증에서 <strong>정답 출력 28%→52%, 오답 출력 72%→5%, 측정 보류 0%→43%</strong>로 바뀌었고, 표시된 숫자 중 오답은 72%→8%입니다. 오답 감소의 상당 부분은 보류에서 나온 것입니다. v1.6은 느린 심박에서 배음을 잡음으로 세던 v1.5의 SNR을 고쳤습니다. <a href="validation.html">검증 결과 →</a></div></div>
+      <div class="callout callout-info"><span class="ic" aria-hidden="true">🎨</span><div><strong>POS와의 비교.</strong> 세 채널을 써서 밝기 변화를 상쇄하는 POS(Wang et al., 2017)도 구현했습니다. 시뮬레이션에서는 잡음 모델에 따라 우열이 바뀌어 기본값으로 채택하지 않았고, 실측 도구가 같은 영상에서 두 방식을 동시에 기록해 실제 데이터로 판정합니다.</div></div>
+    </div>
+    <p class="small" style="margin-top:14px;">Wang W, den Brinker AC, Stuijk S, de Haan G. Algorithmic Principles of Remote PPG. <em>IEEE Trans Biomed Eng</em> 2017;64(7):1479–1491. <a href="https://doi.org/10.1109/TBME.2016.2609282" target="_blank" rel="noopener">DOI ↗</a> · de Haan G, Jeanne V. Robust Pulse Rate From Chrominance-Based rPPG. <em>IEEE Trans Biomed Eng</em> 2013;60(10):2878–2886. <a href="https://doi.org/10.1109/TBME.2013.2266196" target="_blank" rel="noopener">DOI ↗</a> · Poh MZ, McDuff DJ, Picard RW, 2010(자동 얼굴 추적 + ICA). <a href="https://doi.org/10.1364/OE.18.010762" target="_blank" rel="noopener">DOI ↗</a> · Verkruysse W, Svaasand LO, Nelson JS, 2008. <a href="https://doi.org/10.1364/OE.16.021434" target="_blank" rel="noopener">DOI ↗</a></p>
+  </div>
+</section>
+
+<section style="background:var(--surface-1); border-top:1px solid var(--border); border-bottom:1px solid var(--border);">
+  <div class="wrap">
+    <p class="section-eyebrow">검증 근거</p>
+    <h2 class="section-title">브라우저 기반 rPPG는 실제로 믿을 만한가</h2>
+    <div class="grid grid-2">
+      <div class="cite-card reveal">
+        <div class="headline">웹 기반 rPPG vs 심전도(ECG) 직접 검증</div>
+        <div class="metric">ICC 0.96</div>
+        <p style="color:var(--text-secondary); font-size:13.5px; margin-top:8px;">표준화된 온라인 인프라로 측정한 브라우저 기반 rPPG를 ECG 기준과 직접 비교 — Bland–Altman 한계 내 95% 일치, 녹화 시간이 길수록 오차 감소, 카메라 거리 영향은 미미.</p>
+        <div class="src">Finotti, Di Lernia &amp; Tsakiris, <em>Behavior Research Methods</em>, 2026 · <a href="https://doi.org/10.3758/s13428-026-03098-7" target="_blank" rel="noopener">DOI ↗</a></div>
+      </div>
+      <div class="cite-card reveal">
+        <div class="headline">"야생의" 온라인 웹캠 환경 검증</div>
+        <div class="metric">r 0.75 · 0.58</div>
+        <p style="color:var(--text-secondary); font-size:13.5px; margin-top:8px;">연구 1(공개 데이터셋 CohFace, 접촉식 맥파 기준): r 약 0.75. 연구 2(온라인 영상 231개, 녹화 직후 잰 검증된 스마트폰 심박 앱 기준): r 0.58, rPPG가 심박을 낮게 추정 — 실사용 조건의 현실적 성능 범위입니다.</p>
+        <div class="src">Di Lernia et al., <em>Behavior Research Methods</em>, 2024 · <a href="https://doi.org/10.3758/s13428-024-02398-0" target="_blank" rel="noopener">DOI ↗</a></div>
+      </div>
+      <div class="cite-card reveal">
+        <div class="headline">규제 의료기기 대비 임상 비교</div>
+        <div class="metric">±3<small>단위 이내</small></div>
+        <p style="color:var(--text-secondary); font-size:13.5px; margin-top:8px;">카메라 기반 바이탈 측정 제품을 규제 의료기기와 비교 — 심박수·호흡수·산소포화도 평균오차 ±3 이내, 혈압 ±10mmHg. VitalLens는 이 중 심박만 재며, 산소포화도는 재지 않습니다.</p>
+        <div class="src">Talukdar, De Deus &amp; Sehgal, <em>Cureus</em>, 2022 · <a href="https://doi.org/10.7759/cureus.31649" target="_blank" rel="noopener">DOI ↗</a></div>
+      </div>
+      <div class="cite-card reveal">
+        <div class="headline">스마트폰 카메라 심폐 동시 모니터링</div>
+        <div class="metric">RR MAE &lt;1<small>회/분</small></div>
+        <p style="color:var(--text-secondary); font-size:13.5px; margin-top:8px;">다중 관심영역 스펙트럼 접근으로 스마트폰 내장 카메라만으로 심박·호흡을 동시에 연속 측정 — 호흡수 평균절대오차 1회/분 미만, 심박수 0.7–6 bpm. 카메라 호흡수 측정은 VitalLens의 로드맵 항목입니다(현재 미구현).</p>
+        <div class="src">Molinaro, Schena, Silvestri &amp; Massaroni, <em>Sensors</em>, 2022 · <a href="https://doi.org/10.3390/s22072539" target="_blank" rel="noopener">DOI ↗</a></div>
+      </div>
+    </div>
+    <p class="small" style="margin-top:18px;">종합 리뷰: Pirzada, Wilde &amp; Harris-Birtill, <em>IEEE Sensors Journal</em>, 2024 — rPPG 파이프라인(ROI 선택·필터링·데이터셋)과 조명·움직임·피부톤에 따른 강건성 한계를 정리. <a href="https://doi.org/10.1109/JSEN.2024.3405414" target="_blank" rel="noopener">DOI ↗</a></p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="section-eyebrow">02 · 기능평가 자동화</p>
+    <h2 class="section-title">30초 앉았다일어서기(STS) — 현재와 로드맵</h2>
+    <p class="section-lead">30초 앉았다일어서기는 코스가 필요한 6분 보행검사와 달리 좁은 집에서도 할 수 있고 표준화가 쉬워 원격 기능평가로 택했습니다(지식베이스 9.4절). 자동 카운팅 기술은 아래와 같이 단계적으로 고도화합니다.</p>
+    <div class="grid grid-2">
+      <div class="card reveal">
+        <span class="pill pill-pulmonary">현재 · v1 시험 기능 (미검증)</span>
+        <h3 style="margin-top:10px;">프레임 차분 기반 동작량 카운터</h3>
+        <p>연속 프레임의 픽셀 차이(motion magnitude)를 계산합니다. 한 번의 반복에는 일어서기·앉기 두 번의 움직임이 있으므로, 히스테리시스 상태 기계로 움직임 덩어리를 찾아 홀수 번째 덩어리(일어서기)가 끝날 때만 1회로 셉니다. 30초 시계는 카메라 영상이 들어온 뒤에 시작합니다. 사람 영상으로 직접 센 횟수와 비교한 검증은 아직 없으므로, AI 코치 세션에서는 환자가 센 횟수를 씁니다.</p>
+      </div>
+      <div class="card reveal">
+        <span class="pill pill-neutral">로드맵 · v2</span>
+        <h3 style="margin-top:10px;">자세추정 기반 관절 궤적 카운팅</h3>
+        <p>엉덩이·무릎 키포인트의 수직 위치 진동으로 반복을 세고, 나아가 무게중심 궤적까지 도출하는 방식으로 고도화합니다. 아래 선행연구가 이 접근의 타당성을 뒷받침합니다.</p>
+      </div>
+    </div>
+    <div class="grid grid-2" style="margin-top:20px;">
+      <div class="cite-card reveal">
+        <div class="headline">30초 STS 컴퓨터비전 정량평가</div>
+        <div class="metric">AUC 0.993 <small>n=32</small></div>
+        <p style="color:var(--text-secondary); font-size:13.5px; margin-top:8px;">지역사회 고령자 32명(정상 18·허약 14), 스마트폰 영상 + Keypoint R-CNN 자세추정으로 무게중심 운동학·엔트로피 지표를 추출해 랜덤포레스트로 판별. 같은 코호트 안 교차검증이며 저자들이 예비 타당성 연구로 규정 — VitalLens v2 설계의 참고 근거.</p>
+        <div class="src">Hsu, Hsu, Sun &amp; Lee, <em>Journal of NeuroEngineering and Rehabilitation</em>, 2026 · <a href="https://doi.org/10.1186/s12984-026-01970-3" target="_blank" rel="noopener">DOI ↗</a></div>
+      </div>
+      <div class="cite-card reveal">
+        <div class="headline">2D AI 카메라 vs 힘판(force plate)</div>
+        <div class="metric">힘판과 비교</div>
+        <p style="color:var(--text-secondary); font-size:13.5px; margin-top:8px;">2D AI 카메라 자세추정 시스템의 STS 파워 측정치를 실험실 힘판과 비교해 타당성·신뢰성을 보고(건강한 성인 24명, 20–55세, 두 시행 모두 비례 편향).</p>
+        <div class="src">Jeanfavre &amp; Xiao, <em>Int J Sports Phys Ther</em>, 2026 · <a href="https://doi.org/10.26603/001c.158667" target="_blank" rel="noopener">DOI ↗</a></div>
+      </div>
+      <div class="cite-card reveal">
+        <div class="headline">OpenPose+LSTM 반복 자동 카운팅</div>
+        <div class="metric">&gt;90% <small>분류 정확도</small></div>
+        <p style="color:var(--text-secondary); font-size:13.5px; margin-top:8px;">골격 키포인트 + LSTM으로 운동 4종(푸시업·싯업·스쿼트·플랭크)을 분류한 정확도가 90% 이상 — 반복 횟수 정확도가 아니며, STS 카운팅으로 옮기려면 별도 검증이 필요합니다.</p>
+        <div class="src">Japhne, Janada, Theodorus &amp; Chowanda, <em>Journal of Big Data</em>, 2024 · <a href="https://doi.org/10.1186/s40537-024-00915-8" target="_blank" rel="noopener">DOI ↗</a></div>
+      </div>
+      <div class="cite-card reveal">
+        <div class="headline">비제약 환경 다중 운동 인식</div>
+        <div class="metric">GymCam</div>
+        <p style="color:var(--text-secondary); font-size:13.5px; margin-top:8px;">밀집 광류(optical flow)로 웨어러블 없이 여러 사람의 다양한 운동을 동시에 감지·인식·카운팅 — 가정 환경 다중 인물 시나리오에 참고.</p>
+        <div class="src">Khurana et al. (GymCam), <em>ACM IMWUT</em>, 2018 · <a href="https://doi.org/10.1145/3287063" target="_blank" rel="noopener">DOI ↗</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="background:var(--surface-1); border-top:1px solid var(--border); border-bottom:1px solid var(--border);">
+  <div class="wrap">
+    <p class="section-eyebrow">03 · 시스템 아키텍처</p>
+    <h2 class="section-title">3계층 설계 — 지식베이스 제9장 9.6절의 틀</h2>
+    <p class="section-lead">원격 심폐재활의 기술 요건을 환자 측 계측·통신·플랫폼 3계층으로 정리한 문헌의 틀을 따르되, 환자 측 계측에서 <strong>심박 벨트를 카메라로</strong> 바꿉니다. 교재는 모든 심폐 원격재활의 최소 구성으로 심박 측정 기기와 맥박산소측정기를 꼽습니다. 카메라는 앞의 것만 대신합니다: 맥박산소측정기는 COPD·저산소혈증에서 필수이고(커널이 강제), 심장재활 환자에게도 권장합니다(값을 넣으면 커널이 판정). 심장재활에서 산소측정기를 필수로 두지 않은 것은 교재의 최소 구성과 다른 VitalLens의 선택입니다.</p>
+    <div class="grid grid-3">
+      <div class="card reveal">
+        <div class="icon icon-cardiac" aria-hidden="true">📷</div>
+        <h3>계층 1 · 환자 측</h3>
+        <p>심박 벨트·심전도 패치 없이 정지 시 심박을 확인합니다. 산소포화도와 심전도(리듬)는 측정하지 않으므로 맥박산소측정기를 대체하지 않으며, COPD·저산소혈증 환자에게는 맥박산소측정기가 필수입니다(값은 체크인 때 입력). 심전도 리듬 감시가 필요한 환자는 원격 단독 세션 대상이 아닙니다.</p>
+      </div>
+      <div class="card reveal">
+        <div class="icon icon-pulmonary" aria-hidden="true">📶</div>
+        <h3>계층 2 · 통신</h3>
+        <p>영상은 기기 밖으로 전송되지 않습니다 — rPPG·STS 연산이 전부 브라우저 내부(클라이언트 사이드)에서 실행되므로 대역폭·지연에 민감한 실시간 영상 업로드가 필요 없습니다.</p>
+      </div>
+      <div class="card reveal">
+        <div class="icon icon-combined" aria-hidden="true">🗂️</div>
+        <h3>계층 3 · 플랫폼</h3>
+        <p>세션 기록은 서버 없이 브라우저 메모리에만 있고, 세션이 끝나면 감사 기록 JSON과 HL7 FHIR R4 Bundle로 직접 내려받아 보관합니다. 심박은 LOINC 8867-4(단위 /min) — 카메라 값에만 측정법 PPG와 기기를 붙이고, 직접 입력한 값·SpO₂·RPE·호흡곤란은 환자 보고(performer)로 적습니다. 30초 앉았다일어서기는 66247-8. Borg 6–20과 수정 Borg 호흡곤란은 알맞은 LOINC 코드가 없어 VitalLens 로컬 코드로 표시합니다. 가상 환자 기록에는 합성 데이터 태그가 붙고, 감사 체인의 머리 해시는 Provenance에 담깁니다.</p>
+      </div>
+    </div>
+    <div class="callout callout-info" style="margin-top:22px;">
+      <span class="ic" aria-hidden="true">🔒</span>
+      <div><strong>개인정보 설계 원칙:</strong> rPPG·STS 카운팅은 모두 브라우저 안의 JavaScript로 실행되고, 얼굴 영상은 화면에 그려질 뿐 어디로도 전송·저장되지 않습니다. 선택 기능인 Claude 플래너를 켜면 영상은 가지 않지만 <strong>건강정보가 api.anthropic.com(미국)으로 전송</strong>됩니다: 나이, 안정시 심박, 운동부하검사 최대심박과 그 검사를 현재 약물 상태에서 했는지, 베타차단제 복용 여부, COPD 여부, 위험군, 의료진 감독 여부, 세션 전 안전 확인 결과(오늘의 증상, 휴대전화·공간·119 확인, 안정 시 SpO₂), 체크인마다 심박·RPE·호흡곤란·SpO₂·증상, 30초 앉았다일어서기 횟수, 운동 단계를 일찍 끝냈는지(환자 ID는 보내지 않음). Claude 플래너는 동의 체크 없이 실행되지 않습니다. SDK는 이 사이트에 함께 올린 파일을 쓰고(외부 CDN 없음), 모든 페이지의 콘텐츠 보안 정책(CSP)이 다른 곳으로의 연결을 막습니다.</div>
+    </div>
+  </div>
+</section>
+
+<section class="tight">
+  <div class="wrap">
+    <p class="section-eyebrow">04 · 에이전트 하네스</p>
+    <h2 class="section-title">열린 도구, 닫힌 안전 경계</h2>
+    <div class="grid grid-3">
+      <div class="card reveal"><h3>도구로만 행동</h3><p>플래너는 8개 도구(프로필·목표 구간·세션 전 확인·안내 문장·운동 단계·정지 체크인·STS·종료)로만 행동합니다. 환자에게 하는 말도 도구로만 보내므로, 모든 문장이 커널의 문장 검사를 지납니다. 도구 밖에서 쓴 모델의 글은 환자에게 보이지 않고 감사 기록에 "모델 메모"로 남습니다.</p></div>
+      <div class="card reveal"><h3>결정론적 커널</h3><p>커널은 모든 제안의 형식(JSON 스키마)·순서(안전 확인 → 준비운동 → 체크인…)·범위(목표 구간, 시간, 누적 30분)·문장을 검사하고, 체크인마다 계속·하향·재확인·중단을 판정합니다. 규칙과 출처는 코드 한곳(<code>SAFETY_RULES</code>)에 있고 <code>npm test</code>가 안전·적대적 시나리오를 자동으로 돌립니다.</p></div>
+      <div class="card reveal"><h3>MCP로 여는 하네스</h3><p>같은 도구·커널·감사 기록을 표준 MCP(Model Context Protocol) stdio 서버로 엽니다: <code>node mcp/server.js</code>. Claude Code 같은 MCP 클라이언트가 가상 환자 세션을 돌리며 커널의 거부를 직접 확인할 수 있습니다(<code>claude mcp add vitallens -- node mcp/server.js</code>). 실제 사람과 카메라는 연결하지 않습니다.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="section-eyebrow">05 · 한계</p>
+    <h2 class="section-title">정직하게 밝히는 현재 한계</h2>
+    <div class="grid grid-2">
+      <div class="callout callout-warn reveal"><span class="ic" aria-hidden="true">⚠️</span><div><strong>조명·피부톤 강건성.</strong> rPPG 신호 품질은 조명 안정성과 피부톤에 따라 달라질 수 있음이 문헌에서 반복 지적됩니다(Pirzada et al., 2024). VitalLens는 신호 품질 지표를 실시간 표시해 저품질 구간을 사용자에게 알리지만, 다양한 피부톤·조명 조건에서의 정량 검증은 향후 연구 과제입니다.</div></div>
+      <div class="callout callout-warn reveal"><span class="ic" aria-hidden="true">⚠️</span><div><strong>진단이 아닌 보조 도구.</strong> VitalLens는 심방세동 등 부정맥 진단을 표방하지 않습니다. FDA 510(k) 허가(cleared) rPPG 기술을 쓰는 심장 선별용 스마트 거울 FaceHeart CardioMirror(CES 2025 Digital Health Honoree)와는 목적이 다릅니다(<a href="about.html">소개</a> 참조). 운동 강도 보조와 기능평가 기록(FHIR 내보내기)이 목적입니다.</div></div>
+      <div class="callout callout-warn reveal"><span class="ic" aria-hidden="true">⚠️</span><div><strong>v1 STS 카운터는 미검증.</strong> 프레임 차분 방식은 관절 각도·무게중심 같은 운동학 지표를 주지 않고, 직접 센 횟수와 비교한 검증도 아직 없습니다. 자세추정 기반 v2와 사람 영상 검증이 로드맵의 우선 과제입니다.</div></div>
+      <div class="callout callout-warn reveal"><span class="ic" aria-hidden="true">⚠️</span><div><strong>운동 중 주기적 움직임과 회복기 편향.</strong> 페달·걷기처럼 심박 대역 안에 드는 움직임은 녹색·POS 모두 심박으로 착각합니다(맥파와 같은 세기의 약한 움직임에서도 오답 출력 녹색 약 12~14%, POS 약 10~29% — 잡음 모델에 따라). 그래서 정지 체크인에서만 심박을 재는데, 이 값은 멈춘 직후 회복기 평균이라 멈춘 순간보다 2–9 bpm 낮게 나옵니다(시뮬레이션). 운동부하검사가 없으면 자각인지도가 1차 기준이고, 심박이 1차 기준인 환자도 자각인지도가 목표를 넘으면 강도를 낮추므로 두 채널 중 하나라도 넘으면 하향됩니다. 체크인 기록에는 측정 창의 시각과 운동 종료 뒤 경과 시간이 함께 남습니다.</div></div>
+      <div class="callout callout-warn reveal"><span class="ic" aria-hidden="true">⚠️</span><div><strong>임상 검증 이전 단계.</strong> 1차 평가변수·대조군·표본 크기를 미리 정한 확증임상 없이는 효과를 주장할 수 없습니다(국내 호흡재활 DTx도 같은 6MWT 평가변수에서 결과가 갈렸습니다). VitalLens는 그 이전 단계인 엔지니어링 프로토타입입니다.</div></div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div>© 2026 VitalLens Project · 경운대학교 재활치료전공 · 비상업 연구 프로토타입 · <strong>의료기기 아님</strong> (진단·치료 목적 사용 금지)</div>
+    <div><a href="evidence.html">근거</a> · <a href="technology.html">기술</a> · <a href="validation.html">검증</a> · <a href="about.html">소개·한계</a> · <a href="https://github.com/y3korea/vitallens">소스 코드</a></div>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>

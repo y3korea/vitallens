@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
+<title>근거 데이터 — VitalLens</title>
+<meta name="description" content="심장·호흡 원격재활의 완료율, 효과크기, 안전성, 경제성 근거를 원출처 링크와 함께 정리했습니다.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22><rect width=%2232%22 height=%2232%22 rx=%228%22 fill=%22%23e34948%22/><path d=%22M6 17h4l2-6 4 12 3-9 2 3h5%22 stroke=%22white%22 stroke-width=%222.4%22 fill=%22none%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22/></svg>">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="VitalLens">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:title" content="근거 데이터 — VitalLens">
+<meta property="og:description" content="심장·호흡 원격재활의 완료율, 효과크기, 안전성, 경제성 근거를 원출처 링크와 함께 정리했습니다.">
+<meta property="og:url" content="https://y3korea.github.io/vitallens/evidence.html">
+<link rel="canonical" href="https://y3korea.github.io/vitallens/evidence.html">
+<link rel="stylesheet" href="css/style.css">
+<script src="js/theme-init.js"></script>
+</head>
+<body>
+
+<a class="skip-link" href="#main">본문으로 건너뛰기</a>
+<nav class="site-nav" aria-label="주 메뉴">
+  <div class="wrap">
+    <a class="brand" href="index.html">
+      <svg class="mark" viewBox="0 0 32 32" fill="none" aria-hidden="true"><rect width="32" height="32" rx="9" fill="var(--cardiac)"/><path d="M6 17h4l2-6 4 12 3-9 2 3h5" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      VitalLens
+    </a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="index.html">홈</a></li>
+      <li><a href="evidence.html">근거</a></li>
+      <li><a href="technology.html">기술</a></li>
+      <li><a href="validation.html">검증</a></li>
+      <li><a href="agent.html">AI 코치</a></li>
+      <li><a href="demo.html">라이브 데모</a></li>
+      <li><a href="about.html">소개</a></li>
+    </ul>
+    <div style="display:flex; align-items:center;">
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="밝은/어두운 테마 전환">🌙</button>
+      <button class="nav-toggle-btn" type="button" data-nav-toggle aria-label="메뉴 열기" aria-expanded="false" aria-controls="nav-links">☰</button>
+    </div>
+  </div>
+</nav>
+
+<main id="main">
+
+<header class="hero" style="padding:56px 0 20px;">
+  <div class="wrap">
+    <span class="hero-badge">근거 데이터</span>
+    <h1 style="font-size:clamp(28px,4vw,42px);">숫자로 보는 심장·호흡 원격재활</h1>
+    <p class="lead">모든 수치는 경운대학교 재활치료전공 지식베이스(ClinicalTrials.gov 6,389건 · Europe PMC 19,093건 · PubMed 상세 2,814건 · 큐레이션 자료 666건 기반)와 원출처 논문에서 가져왔고, 각 카드에 인용·링크와 함께 대상자·비교군·근거 수준을 적었습니다.</p>
+  </div>
+</header>
+
+<section class="tight">
+  <div class="wrap">
+    <p class="section-eyebrow">근거 지도</p>
+    <h2 class="section-title">심폐 원격재활 연구는 어느 기술에 몰려 있나</h2>
+    <p class="section-lead">질환군 × 기술요소 문헌 수를 비교하면 심폐 영역은 웨어러블·센서(198·147건), 모바일앱(191·108건), 원격모니터링(159·95건) 축에 근거가 몰려 있고, VR/AR/XR(26·40건)·게이미피케이션(21·15건)·로봇(13·11건)은 웨어러블·센서 대비 약 1/4(호흡 VR/AR)에서 1/15(심장 로봇) 수준입니다. VitalLens는 VR이 아니라 이 원격모니터링 축에 속하며, 그 안에서 <strong>심박용 추가 기기 없는 측정</strong>과 <strong>AI 안전 경계</strong>를 다르게 설계했습니다.</p>
+    <div id="gap-map" class="card"></div>
+  </div>
+</section>
+
+<section id="effects">
+  <div class="wrap">
+    <p class="section-eyebrow">완료율 &amp; 효과</p>
+    <h2 class="section-title">"더 좋은 치료"가 아니라 "끝까지 받는 치료"</h2>
+    <div class="grid grid-3">
+      <div class="cite-card reveal">
+        <span class="pill pill-pulmonary">호흡재활 완료율</span>
+        <div class="headline" style="margin-top:10px;">원격 호흡재활 완료율 93% vs 센터 70%</div>
+        <div class="metric">+23<small>%p</small></div>
+        <p style="color:var(--text-secondary); font-size:13.5px; margin-top:8px;">완료율 비교는 1차 원격재활 vs 센터기반 RCT 3편·516명(오즈비 5.36, 3.12–9.21)에서 나왔습니다. 리뷰 전체는 15편·1,904명(99% COPD)입니다. 심장재활 자료가 아닙니다.</p>
+        <div class="src">Cox NS 등, Cochrane Database of Systematic Reviews, 2021 · <a href="https://doi.org/10.1002/14651858.CD013040.pub2" target="_blank" rel="noopener">DOI ↗</a></div>
+      </div>
+      <div class="cite-card reveal">
+        <span class="pill pill-cardiac">심장재활</span>
+        <div class="headline" style="margin-top:10px;">재택 심장재활(mHealth) vs 통상치료</div>
+        <div class="metric">+24.74<small>m 6MWT</small></div>
+        <p style="color:var(--text-secondary); font-size:13.5px; margin-top:8px;">13편·1,508명 중 6MWT는 532명: 평균차 +24.74 m (9.88–39.60). VO2peak 평균차 +1.77 (1.19–2.35; 359명). 근거 수준 낮음~매우 낮음(GRADE), 센터기반 대비 유의차 없음. 점추정치는 관상동맥질환 심장재활에서 도출된 최소 임상 중요 차이(약 25 m, <a href="https://doi.org/10.1016/j.apmr.2010.11.023" target="_blank" rel="noopener">Gremeaux 2011</a>) 수준이지만, 신뢰구간 하한(9.88 m)은 그보다 작고 포함 연구에는 심부전도 있습니다.</p>
+        <div class="src">Li L 등, The Lancet Digital Health, 2025 · <a href="https://doi.org/10.1016/j.landig.2025.01.011" target="_blank" rel="noopener">DOI ↗</a></div>
+      </div>
+      <div class="cite-card reveal">
+        <span class="pill pill-pulmonary">호흡재활</span>
+        <div class="headline" style="margin-top:10px;">원격 호흡재활 vs 센터기반 (COPD 메타분석)</div>
+        <div class="metric">유의차 없음</div>
+        <p style="color:var(--text-secondary); font-size:13.5px; margin-top:8px;">17편·1,658명 중 6MWT는 9편·950명: −5.37 m (−15.68~4.95, P=.26; 95% 예측구간 −32.7~22.3 m). 탈락 위험비 0.66 (0.40~1.07, 유의하지 않음). 근거 확실성 중등도~매우 낮음. 차이가 없다는 것이 동등성 입증은 아니며, 일관된 효과는 디지털 지원·실시간 감독형 모델에서 나왔습니다.</p>
+        <div class="src">Li Y 등, JMIR, 2026 · <a href="https://doi.org/10.2196/80500" target="_blank" rel="noopener">DOI ↗</a></div>
+      </div>
+      <div class="cite-card reveal">
+        <span class="pill pill-pulmonary">COVID-19 회복</span>
+        <div class="headline" style="margin-top:10px;">TERECO — 무재활 대조군 대비</div>
+        <div class="metric">+65.45<small>m 6MWT</small></div>
+        <p style="color:var(--text-secondary); font-size:13.5px; margin-top:8px;">120명, 95% CI 43.8–87.1, p&lt;0.001. 비교 대상이 "재활을 받지 않음"이라는 점을 함께 읽어야 합니다.</p>
+        <div class="src">Li J 등, Thorax, 2022 · <a href="https://doi.org/10.1136/thoraxjnl-2021-217382" target="_blank" rel="noopener">DOI ↗</a></div>
+      </div>
+      <div class="cite-card reveal">
+        <span class="pill pill-neutral">원격재활 효과크기 (COVID-19)</span>
+        <div class="headline" style="margin-top:10px;">30초 앉았다일어서기 · 6MWT</div>
+        <div class="metric">SMD 0.88 <small>· 0.83</small></div>
+        <p style="color:var(--text-secondary); font-size:13.5px; margin-top:8px;">COVID-19 환자, 무치료·통상치료 대비: 30초 STS 0.88 [0.52–1.25] (3편·122명), 6MWT 0.83 [0.42–1.24] (4편·221명). 심폐재활 환자 자료가 아니며, 효과크기는 검사의 적합성을 뜻하지 않습니다. STS를 택한 이유는 공간 요구가 작고 표준화가 쉽기 때문입니다(교재 9.4).</p>
+        <div class="src">Thanakamchokchai J 등, Digital Health, 2025 · <a href="https://doi.org/10.1177/20552076251325993" target="_blank" rel="noopener">DOI ↗</a></div>
+      </div>
+      <div class="cite-card reveal">
+        <span class="pill pill-neutral">안전성</span>
+        <div class="headline" style="margin-top:10px;">원격재활 유해사례 발생률</div>
+        <div class="metric">0.3<small>%</small></div>
+        <p style="color:var(--text-secondary); font-size:13.5px; margin-top:8px;">RCT 37편·3,166명, 65,352세션 중 201건(0.31%), 대부분 경증 — 이 리뷰의 포함 연구 92%가 활력징후 모니터링·안전 체크리스트·연구진 정기 확인 같은 <strong>사람이 맡는 안전장치</strong>를 썼습니다(Shnitzer). 별도 범위 문헌고찰에서는 84,534세션 중 295건이었고, 중증도가 보고된 사건의 87.4%가 경증이었으며, <strong>심장재활 연구에서 유해사례가 가장 많았습니다</strong>(6편·92건, 협심증·실신 포함; Yau). 두 자료 모두 전 재활 영역이며 무인 세션에 그대로 옮길 수 없는 수치입니다.</p>
+        <div class="src">Shnitzer H 등, JMIR RATE, 2025 · <a href="https://doi.org/10.2196/68681" target="_blank" rel="noopener">DOI ↗</a> · Yau T 등, PLOS ONE, 2024 · <a href="https://doi.org/10.1371/journal.pone.0313440" target="_blank" rel="noopener">DOI ↗</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="background:var(--surface-1); border-top:1px solid var(--border); border-bottom:1px solid var(--border);">
+  <div class="wrap">
+    <p class="section-eyebrow">비용 이동</p>
+    <h2 class="section-title">원격 전환은 비용을 없애지 않는다 — 부담을 옮길 뿐</h2>
+    <div class="grid grid-2" style="align-items:center;">
+      <div class="card reveal">
+        <h3>1인당 프로그램 비용 (8주 프로그램, 부담 주체별)</h3>
+        <p class="small">호주 동등성 시험, 만성 호흡기질환. 원격군은 화상 동기 감독형.</p>
+        <div class="barlist" style="margin-top:18px;">
+          <div class="barrow" style="grid-template-columns:90px 1fr 90px;">
+            <span class="name">원격 · 보건체계</span>
+            <span class="bartrack"><span class="barfill" style="width:74%; background:var(--combined)"></span></span>
+            <span class="val">A$1,601</span>
+          </div>
+          <div class="barrow" style="grid-template-columns:90px 1fr 90px;">
+            <span class="name">원격 · 환자</span>
+            <span class="bartrack"><span class="barfill" style="width:26%; background:var(--cardiac)"></span></span>
+            <span class="val">A$554</span>
+          </div>
+          <div class="barrow" style="grid-template-columns:90px 1fr 90px;">
+            <span class="name">센터 · 보건체계</span>
+            <span class="bartrack"><span class="barfill" style="width:24%; background:var(--combined)"></span></span>
+            <span class="val">A$529</span>
+          </div>
+          <div class="barrow" style="grid-template-columns:90px 1fr 90px;">
+            <span class="name">센터 · 환자</span>
+            <span class="bartrack"><span class="barfill" style="width:60%; background:var(--cardiac)"></span></span>
+            <span class="val">A$1,298</span>
+          </div>
+        </div>
+        <p class="small" style="margin-top:14px;">환자 부담 비중: 원격 26% vs 센터 71%. 원격 전환은 비용을 환자에서 보건체계로 옮겼습니다. 이와 별도로, 프로그램 이후 12개월 총비용의 군간 차이는 A$565(표준오차 5,452)로 유의하지 않았습니다(p=0.92). VitalLens가 심박 측정용 추가 기기를 요구하지 않는 이유는, 원격의 환자 부담 감소 효과를 기기 구매가 상쇄하지 않게 하고 제공자가 기기를 보급하는 비용도 줄이기 위해서입니다. 맥박산소측정기는 여전히 필요합니다(COPD 필수, 심장재활 권장).</p>
+        <div class="src">Burge AT 등, Annals of the American Thoracic Society, 2025 · <a href="https://doi.org/10.1513/AnnalsATS.202405-549OC" target="_blank" rel="noopener">DOI ↗</a></div>
+      </div>
+      <div class="card reveal">
+        <h3>시장 신호</h3>
+        <p style="color:var(--text-secondary); font-size:14.5px;">심장재활은 적응증별 매출 1위(33.75%), 호흡재활은 CAGR 1위(17.19%)로 성장 중이지만, 전달은 클라우드(67.90%)·병원 중심(48.10%)에 머물러 있습니다(시장 조사 보고서 수치, 동료 심사 자료 아님).</p>
+        <p style="color:var(--text-secondary); font-size:14.5px;">국내 비대면진료 코호트(COPD 환자 37,460명 중 10,291명 이용)에서는 고혈압·당뇨와 달리 임상적 효과가 제한적이었습니다 — <strong>질환군마다 원격 전달의 작동 기전이 다르다</strong>는 신호이며, VitalLens가 심폐 특이적 기능평가·강도처방을 설계한 근거입니다.</p>
+        <div class="src">Mordor Intelligence 2026 · <a href="https://www.mordorintelligence.com/industry-reports/telerehabilitation-market" target="_blank" rel="noopener">보고서 ↗</a> · Kang JY 등, JMIR Public Health Surveill, 2024 · <a href="https://doi.org/10.2196/59138" target="_blank" rel="noopener">DOI ↗</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="section-eyebrow">국내 사례</p>
+    <h2 class="section-title">같은 6분 보행검사, 다른 결과: 이지브리드와 레드필 숨튼</h2>
+    <div class="grid grid-2">
+      <div class="card reveal">
+        <span class="pill pill-pulmonary">국내 4호 디지털치료기기</span>
+        <h3 style="margin-top:10px;">이지브리드 (EasyBreath) — 쉐어앤서비스</h3>
+        <p>2024-04-19 식품의약품안전처 허가. 6분 보행검사·개인별 유산소 처방·호흡 재훈련·교육을 통합한 8주 프로그램. 다기관 RCT(92명 무작위배정, 84명 완료자 분석)에서 8주 6MWT 변화 중재군 +57.68 m vs 대조군 +21.71 m (p=0.0008), mMRC·CAT·SGRQ 모두 유의하게 개선. <strong>대조군은 호흡재활 1회 교육 + 운동 권고(최소 중재)</strong>였고, 저자들은 임상시험 레지스트리에 등록하지 않았다고 밝혔습니다.</p>
+        <div class="src">Kim C 등, Life(Basel) MDPI, 2024 · <a href="https://doi.org/10.3390/life14040469" target="_blank" rel="noopener">DOI ↗</a> · <a href="https://www.mfds.go.kr/brd/m_99/view.do?seq=48206" target="_blank" rel="noopener">식약처 보도자료 ↗</a></div>
+      </div>
+      <div class="card reveal">
+        <span class="pill pill-neutral">교육적 실패 사례</span>
+        <h3 style="margin-top:10px;">레드필 숨튼 — 라이프시맨틱스</h3>
+        <p>확증임상시험(100명, 12주)은 1차 평가변수가 이미 <strong>12주 6분 보행거리 변화</strong>였고, 대조군은 앱을 쓰지 않는 군이었습니다. 군간 차이 −3.97 m(95% 신뢰구간 하한 −23.48 m)로 우월성 입증에 실패했고 안전성은 확인됐습니다. 회사는 표본 확대, 소프트웨어 고도화, 더 적합한 평가변수로 재설계해 다시 신청할 계획을 밝혔습니다. 두 제품 모두 6MWT를 썼으므로 차이는 평가변수가 아니라 <strong>개입의 강도·충실도, 표본 크기(검정력), 추적 기간</strong> 같은 설계 요소에서 봐야 합니다 — VitalLens의 검증 계획에도 반영했습니다.</p>
+        <div class="src">팜이데일리, 2023 · <a href="https://pharm.edaily.co.kr/news/read?newsId=01544886635735856" target="_blank" rel="noopener">기사 ↗</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="background:var(--surface-1); border-top:1px solid var(--border);">
+  <div class="wrap">
+    <p class="section-eyebrow">안전관리 4단계</p>
+    <h2 class="section-title">근거가 제시하는 안전관리와 VitalLens 구현 범위</h2>
+    <p class="section-lead">교재 9.3절이 제시하는 4단계와, 이 프로토타입이 각각을 어디까지 구현했는지를 나란히 적었습니다.</p>
+    <div class="steps" id="safety-steps"></div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div>© 2026 VitalLens Project · 경운대학교 재활치료전공 · 비상업 연구 프로토타입 · <strong>의료기기 아님</strong> (진단·치료 목적 사용 금지)</div>
+    <div><a href="evidence.html">근거</a> · <a href="technology.html">기술</a> · <a href="validation.html">검증</a> · <a href="about.html">소개·한계</a> · <a href="https://github.com/y3korea/vitallens">소스 코드</a></div>
+  </div>
+</footer>
+
+<script src="data/evidence.js"></script>
+<script src="js/charts.js"></script>
+<script src="js/main.js"></script>
+<script src="js/evidence-page.js"></script>
+</body>
+</html>

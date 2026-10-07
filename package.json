@@ -1,0 +1,12 @@
+{
+  "name": "vitallens",
+  "private": true,
+  "type": "commonjs",
+  "scripts": {
+    "test": "node validation/test_rppg.js && node validation/test_stats.js && node validation/test_agent.js && node validation/test_mcp.js",
+    "verify": "node validation/sim_verify.js",
+    "build:mcp": "node validation/build_mcp_manifest.js",
+    "mcp": "node mcp/server.js"
+  },
+  "description": "VitalLens research prototype (not a medical device)"
+}
