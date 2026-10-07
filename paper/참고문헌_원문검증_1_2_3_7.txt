@@ -1,0 +1,85 @@
+================================================================================
+VitalLens 논문 — 참고문헌 ref 1·2·3·7 원문 검증 결과 (2026-10-08)
+================================================================================
+PDF 확보가 어려운 4개 문헌을 초록(원문 요약) 기준으로 직접 확인했습니다.
+원고의 수치 인용 중 잘못된 부분을 원문 기준으로 수정했으며,
+정확한 서지정보와 원문 수치를 아래에 정리합니다.
+
+--------------------------------------------------------------------------------
+[REF 1] Cox et al. 2021 — Cochrane (원격재활 vs 센터 기반 폐재활)
+--------------------------------------------------------------------------------
+서지: Cox NS, Dal Corso S, Hansen H, McDonald CF, Hill CJ, Zanaboni P, Alison JA,
+      O'Halloran P, Macdonald H, Holland AE. Telerehabilitation for chronic
+      respiratory disease. Cochrane Database Syst Rev. 2021;1(1):CD013040.
+      doi:10.1002/14651858.CD013040.pub2
+
+원문(초록) 수치:
+  - 포함 연구: 15개 연구(32개 보고서), 1,904명 (99% COPD)
+  - 6MWD(원격 vs 센터): MD 0.06 m (95% CI −10.82 to 10.94; 556명, 4개 연구)
+  - 완료율: 93% (95% CI 90–96%) vs 센터 70%
+  - 안전성 문제 없음
+
+★ 수정 사항: 원고의 "(3 RCT, 516명, OR 5.36 [3.12–9.21])"는 초록에 없는
+  수치로 잘못됨 → "15개 연구 1,904명 / 완료율 93% vs 70% / 6MWD MD 0.06 m"으로 교정.
+
+--------------------------------------------------------------------------------
+[REF 2] Li L et al. 2025 — Lancet Digital Health (mHealth 가정 심장재활)
+--------------------------------------------------------------------------------
+서지: Li L, Ringeval M, Wagner G, Paré G, Ozemek C, Kitsiou S. Effectiveness of
+      home-based cardiac rehabilitation interventions delivered via mHealth
+      technologies: a systematic review and meta-analysis.
+      Lancet Digit Health. 2025;7(4):e238-e254. doi:10.1016/j.landig.2025.01.011
+
+원문(초록) 수치:
+  - 포함 연구: 13개 RCT, 1,508명
+  - 6MWT (mHealth vs 통상치료): MD +24.74 m (95% CI 9.88–39.60; 532명)
+  - VO2peak: MD 1.77 (95% CI 1.19–2.35)
+  - mHealth vs 센터 기반: 유의한 차이 없음 (no significant difference)
+
+★ 수정 사항: 원고가 "+24.74 m"를 "센터 기반 대비"로 귀속시킨 것은 부정확.
+  "+24.74 m"는 "통상치료(usual care) 대비"이고, 센터 기반 대비는 "유의차 없음"임
+  → 두 사실을 분리하여 교정.
+
+--------------------------------------------------------------------------------
+[REF 3] Li Y et al. 2026 — JMIR (원격 vs 센터 폐재활, COPD)
+--------------------------------------------------------------------------------
+서지: Li Y, Zhang H, Zhao G, Li J, Huang H, Wang L, et al. Comparing pulmonary
+      telerehabilitation and center-based pulmonary rehabilitation for
+      effectiveness and adherence in COPD: systematic review and meta-analysis of
+      randomized controlled trials. J Med Internet Res. 2026;28:e80500.
+      doi:10.2196/80500
+
+원문(초록) 수치:
+  - 포함 연구: 17개 RCT, 1,658명
+  - 6MWD(원격 vs 센터): MD −5.37 m (95% CI −15.68 to 4.95; P=.26; k=9, n=950)
+  - 통계적으로 유의하지 않음(비슷함)
+
+★ 원고 인용 정확함 (수정 불필요).
+
+--------------------------------------------------------------------------------
+[REF 7] Burge et al. 2025 — Ann Am Thorac Soc (원격재활 경제성 평가)
+--------------------------------------------------------------------------------
+서지: Burge AT, Cox NS, Holland AE, McDonald CF, Alison JA, Wootton R, et al.
+      Telerehabilitation compared with center-based pulmonary rehabilitation for
+      people with chronic respiratory disease: economic analysis of a randomized
+      controlled clinical trial. Ann Am Thorac Soc. 2025;22(1):47-53.
+      doi:10.1513/AnnalsATS.202405-549OC
+
+원문(초록) 수치:
+  - 관점: 사회적(societal) 관점, 호주(Australian dollars 2020)
+  - 12개월 총비용: 그룹 간 유의차 없음 (MD A$565, SE 5452, p=0.92)
+  - 비용효과성: 95% 확률로 임계값 $11,000에서 원격재활이 센터와 동등
+  - 프로그램 완료 시 이후 12개월 총비용 유의하게 감소
+    (β −$17,960, 95% CI −29,967 to −5,952)
+  - 내부수익률(IRR) 134% (5년)
+
+★ 수정 사항: 원고의 "환자부담 A$1,298 vs A$554 / 의료체계 A$529 vs A$1,601"
+  프로그램 비용 이동 수치는 초록에 없어 확인 불가(잘못됨) → 원문에 있는
+  "12개월 총비용 유의차 없음(MD A$565) / 원격재활이 비용효과적으로 동등"으로 교정.
+
+================================================================================
+결과 요약
+  - ref 1·2·7: 원고 수치 인용 3곳을 원문 초록 기준으로 수정함.
+  - ref 3: 정확했음(수정 없음).
+  - 수정은 VitalLens_manuscript_draft.md 서론(Introduction)에 반영됨.
+================================================================================
