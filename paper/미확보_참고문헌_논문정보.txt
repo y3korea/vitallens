@@ -1,0 +1,186 @@
+================================================================================
+VitalLens 논문 — PDF로 확보하지 못한 참고문헌 정보 (단일 파일)
+================================================================================
+작성일: 2026-10-07
+
+설명: 아래 문헌들은 출판사 측 자동 다운로드 차단(AWS WAF, Akamai, Cloudflare,
+Radware, reCAPTCHA, Proof-of-Work 등) 또는 유료 구독(페이월) 때문에 스크립트로
+PDF를 내려받지 못했습니다. 각 항목에 브라우저에서 직접 열 수 있는 링크를
+적어두었으니, 일반 웹브라우저에서 링크를 클릭해 수동으로 내려받으세요.
+(웹브라우저에서는 차단이 통과되는 경우가 대부분입니다.)
+
+※ 이미 PDF로 확보된 문헌 (별도 파일):
+  - BlandAltman_2007, Talukdar_2022, Jeanfavre_2026, Li_J_2022(Thorax),
+    Yau_2024(PLOS One), Haag_2025(arXiv) — 참고문헌 폴더
+  - Shnitzer_2025, KumarPichai_2026, Kempton_2025, MuellerGraff_2026 — 참고논문 폴더
+
+================================================================================
+[A] 오픈액세스이나 출판사가 봇 차단 중 → 브라우저에서 클릭해 다운로드
+================================================================================
+
+1. Cox NS, Dal Corso S, Hansen H, McDonald CF, Hill CJ, Zanaboni P, Alison JA,
+   O'Halloran P, Macdonald H, Holland AE. Telerehabilitation for chronic
+   respiratory disease. Cochrane Database Syst Rev. 2021;1(1):CD013040.
+   doi:10.1002/14651858.CD013040.pub2   |   PMCID: PMC8095032
+   PDF: https://www.cochranelibrary.com/cdsr/doi/10.1002/14651858.CD013040.pub2/epdf/full
+
+2. Li L, et al. Effectiveness of home-based cardiac rehabilitation delivered by
+   mobile health versus usual care: a systematic review and meta-analysis.
+   Lancet Digit Health. 2025.  doi:10.1016/j.landig.2025.01.011
+   https://doi.org/10.1016/j.landig.2025.01.011
+
+3. Li Y, et al. Remote pulmonary rehabilitation versus center-based pulmonary
+   rehabilitation in COPD: a systematic review and meta-analysis. J Med Internet
+   Res. 2026.  doi:10.2196/80500
+   PDF: https://www.jmir.org/2026/1/e80500/PDF
+
+4. Burge AT, et al. An economic evaluation of telerehabilitation for chronic
+   respiratory disease. Ann Am Thorac Soc. 2025.
+   doi:10.1513/AnnalsATS.202405-549OC
+   https://www.atsjournals.org/doi/10.1513/AnnalsATS.202405-549OC
+
+5. Verkruysse W, Svaasand LO, Nelson JS. Remote plethysmographic imaging using
+   ambient light. Opt Express. 2008;16(26):21434-21445.  doi:10.1364/OE.16.021434
+   https://opg.optica.org/oe/fulltext.cfm?uri=oe-16-26-21434
+
+6. Poh MZ, McDuff DJ, Picard RW. Non-contact, automated cardiac pulse
+   measurements using video imaging and blind source separation. Opt Express.
+   2010;18(10):10762-10774.  doi:10.1364/OE.18.010762
+   https://opg.optica.org/oe/fulltext.cfm?uri=oe-18-10-10762
+
+7. Spruit MA, Singh SJ, Garvey C, et al. An official American Thoracic Society/
+   European Respiratory Society statement: key concepts and advances in pulmonary
+   rehabilitation. Am J Respir Crit Care Med. 2013;188(8):e13-e64.
+   doi:10.1164/rccm.201309-1634ST
+   https://www.atsjournals.org/doi/10.1164/rccm.201309-1634ST
+
+8. Fletcher GF, Ades PA, Kligfield P, et al. Exercise standards for testing and
+   training: a scientific statement from the American Heart Association.
+   Circulation. 2013;128(8):873-934.  doi:10.1161/CIR.0b013e31829b5b44
+   https://www.ahajournals.org/doi/10.1161/CIR.0b013e31829b5b44
+
+9. Jacobs SS, Krishnan JA, Lederer DJ, et al. Home oxygen therapy for adults with
+   chronic lung disease: an official ATS clinical practice guideline. Am J Respir
+   Crit Care Med. 2020;202(10):e121-e141.  doi:10.1164/rccm.202009-3608ST
+   https://www.atsjournals.org/doi/10.1164/rccm.202009-3608ST
+
+10. Pelliccia A, Sharma S, Gati S, et al. 2020 ESC guidelines on sports cardiology
+    and exercise in patients with cardiovascular disease. Eur Heart J.
+    2021;42(1):17-96.  doi:10.1093/eurheartj/ehaa605
+    PDF: https://academic.oup.com/eurheartj/article-pdf/42/1/17/41216544/ehaa605.pdf
+
+11. Thomas RJ, Beatty AL, Beckie TM, et al. Home-based cardiac rehabilitation: a
+    scientific statement from AACVPR, AHA, and ACC. Circulation.
+    2019;140(1):e69-e89.  doi:10.1161/CIR.0000000000000663
+    https://www.ahajournals.org/doi/10.1161/CIR.0000000000000663
+
+12. Pirzada P, Wilde A, Harris-Birtill D. Remote photoplethysmography: a review of
+    methods, applications, and challenges. IEEE Sens J. 2024.
+    doi:10.1109/JSEN.2024.3405414
+    https://ieeexplore.ieee.org/document/10539093
+
+13. Finotti G, Di Lernia D, Tsakiris M. Web-based remote photoplethysmography
+    validated against electrocardiography. Behav Res Methods. 2026.
+    doi:10.3758/s13428-026-03098-7
+    https://link.springer.com/article/10.3758/s13428-026-03098-7
+
+14. Di Lernia D, et al. Remote photoplethysmography in the wild. Behav Res Methods.
+    2024.  doi:10.3758/s13428-024-02398-0
+    https://link.springer.com/article/10.3758/s13428-024-02398-0
+
+15. Molinaro N, Schena E, Silvestri S, Massaroni C. Contactless monitoring of heart
+    rate and respiratory rate from a smartphone camera. Sensors. 2022;22(7):2539.
+    doi:10.3390/s22072539
+    https://www.mdpi.com/1424-8220/22/7/2539
+
+16. Hsu C, et al. Quantitative assessment of the 30-second sit-to-stand test using
+    computer vision. J Neuroeng Rehabil. 2026.  doi:10.1186/s12984-026-01970-3
+    https://jneuroengrehab.biomedcentral.com/articles/10.1186/s12984-026-01970-3
+
+17. Japhne A, Janada A, Theodorus B, Chowanda A. Exercise recognition using skeletal
+    keypoints and LSTM. J Big Data. 2024.  doi:10.1186/s40537-024-00915-8
+    https://journalofbigdata.springeropen.com/articles/10.1186/s40537-024-00915-8
+
+18. Thanakamchokchai J, et al. Effectiveness of telerehabilitation in COVID-19:
+    a meta-analysis. Digit Health. 2025.  doi:10.1177/20552076251325993
+    https://journals.sagepub.com/doi/10.1177/20552076251325993
+
+19. Kang JY, et al. Clinical effectiveness of non-face-to-face care in COPD.
+    JMIR Public Health Surveill. 2024.  doi:10.2196/59138
+    PDF: https://publichealth.jmir.org/2024/1/e59138/PDF
+
+20. Kim C, et al. A digital therapeutic for pulmonary rehabilitation: a multicenter
+    randomized controlled trial. Life (Basel). 2024;14(4):469.
+    doi:10.3390/life14040469
+    https://www.mdpi.com/2075-1729/14/4/469
+
+================================================================================
+[B] 유료 구독(페이월) — 기관 구독 또는 원문복사서비스 이용 필요
+================================================================================
+
+21. de Haan G, Jeanne V. Robust pulse rate from chrominance-based rPPG. IEEE Trans
+    Biomed Eng. 2013;60(10):2878-2886.  doi:10.1109/TBME.2013.2266196
+    https://ieeexplore.ieee.org/document/6523142
+
+22. Wang W, den Brinker AC, Stuijk S, de Haan G. Algorithmic principles of remote
+    PPG. IEEE Trans Biomed Eng. 2017;64(7):1479-1491.  doi:10.1109/TBME.2016.2609282
+    https://ieeexplore.ieee.org/document/7560642
+
+23. Ambrosetti M, Abreu A, Corrà U, et al. Secondary prevention through
+    comprehensive cardiovascular rehabilitation: from knowledge to implementation.
+    2020 update. Eur J Prev Cardiol. 2021;28(5):460-495.
+    doi:10.1177/2047487320913379
+    https://academic.oup.com/eurjpc/article/28/5/460/5924033
+
+24. Khurana R, Ahuja K, Yu Z, Mankoff J, Harrison C, Goel M. GymCam: detecting,
+    recognizing and tracking simultaneous exercises in unconstrained scenes.
+    Proc ACM Interact Mob Wearable Ubiquitous Technol. 2018;2(4):185.
+    doi:10.1145/3287063
+    https://dl.acm.org/doi/10.1145/3287063
+
+25. Gremeaux V, Troisgros O, Benaïm S, et al. Determining the minimal clinically
+    important difference for the six-minute walk test in coronary artery disease.
+    Arch Phys Med Rehabil. 2011;92(4):611-616.  doi:10.1016/j.apmr.2010.11.023
+    https://doi.org/10.1016/j.apmr.2010.11.023
+
+================================================================================
+[C] 식별자(DOI/PMCID) 재확인 필요 — 원문 위치를 다시 찾아야 함
+================================================================================
+
+26. He Y, et al. Large language models for exercise prescription: a systematic
+    review of safety. Biol Sport. 2026.  (웹사이트 기재 PMCID: PMC13343266 —
+    현재 이 PMC ID는 열리지 않아 정확한 식별자 재확인 필요)
+    검색: https://pubmed.ncbi.nlm.nih.gov/?term=large+language+models+exercise+prescription+safety
+    Biology of Sport 저널: https://www.termedia.pl/Journal/Biology_of_Sport-78
+
+27. ERS/ATS 2014 (운동 중단 기준: 참을 수 없는 호흡곤란, 창백 등) — 정확한 서지
+    정보 재확인 필요. 후보: Spruit MA et al. pulmonary rehabilitation 계열
+    성명문.  검색: https://www.atsjournals.org/
+
+28. ATS/ACCP 2003 (운동 중단 기준: 혼돈/의식저하) — 정확한 서지 정보 재확인 필요.
+    후보: ATS/ACCP Statement on Cardiopulmonary Exercise Testing. Am J Respir Crit
+    Care Med. 2003;167(2):211-277.  doi:10.1164/rccm.167.2.211
+    https://www.atsjournals.org/doi/10.1164/rccm.167.2.211
+
+================================================================================
+[D] 웹 참조자료 (PDF 아님 — 웹페이지 저장/링크로 인용)
+================================================================================
+
+29. Regulation (EU) 2024/1689 (EU AI Act), Article 14 — Human oversight.
+    https://artificialintelligenceact.eu/article/14/
+
+30. 식품의약품안전처. 생성형 인공지능 의료기기 허가·심사 가이드라인 (2025-01-24).
+    https://www.mfds.go.kr/brd/m_1060/view.do?seq=15628
+
+31. Anthropic. Effective harnesses for long-running agents. 2025.
+    https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents
+
+================================================================================
+참고: 수동 다운로드 팁
+- 위 [A] 항목은 대부분 무료이므로 브라우저에서 링크를 열면 "PDF/Download" 버튼이
+  보입니다. 이를 눌러 참고문헌 폴더에 저장하세요.
+- 파일명 규칙(이미 받은 파일과 동일): 저자_연도_저널명_주제.pdf  (예:
+  Cox_2021_Cochrane_Telerehabilitation_CRD.pdf)
+- [B] 항목은 학교 도서관 구독망에서 접속하거나 RISS/KISS/교보스콜라 원문복사로
+  구하세요.
+================================================================================
